@@ -13,11 +13,14 @@ app.use(cors()); // Permite que el Frontend (puerto 5173) hable con el Backend (
 // Configuración de DonDominio (SMTP)
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST, 
-    port: 465, // Puerto seguro SSL habitual en DonDominio
-    secure: true, 
+    port: 587, // Puerto seguro SSL habitual en DonDominio
+    secure: false, 
     auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS
+    },
+    tls: {
+        ciphers: 'SSLv3'
     }
 });
 
