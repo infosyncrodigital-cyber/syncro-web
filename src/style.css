@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pequeños ajustes adicionales */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* Patrón de grid sutil para el Hero */
+.hero-grid-pattern {
+    background-image:
+        linear-gradient(to right, theme(colors.gray.100 / 0.7) 1px, transparent 1px),
+        linear-gradient(to bottom, theme(colors.gray.100 / 0.7) 1px, transparent 1px);
+    background-size: 3rem 3rem;
+}
