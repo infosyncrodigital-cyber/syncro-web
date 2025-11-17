@@ -8,6 +8,7 @@ import Process from './components/Process.vue'
 // import Testimonial from './components/Testimonial.vue'
 import Contact from './components/Contact.vue'
 import Footer from './components/Footer.vue'
+import TechStack from './components/TechStack.vue'
 </script>
 
 <template>
@@ -18,6 +19,7 @@ import Footer from './components/Footer.vue'
     <Problem />
     <Services />
     <Process />
+    <TechStack />
     <!-- <Testimonial /> -->
     <Contact />
   </main>
