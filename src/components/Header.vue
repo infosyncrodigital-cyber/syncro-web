@@ -23,7 +23,7 @@ const closeMobileMenu = () => {
           <div class="flex justify-between items-center h-16">
               
               <a class="text-2xl font-bold text-primary tracking-tight" href="#" @click="closeMobileMenu">
-                  Synkro Digital
+                  Syncro Digital
               </a>
               
               <nav class="hidden md:flex space-x-6 items-center">

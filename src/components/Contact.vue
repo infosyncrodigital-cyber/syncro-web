@@ -65,7 +65,7 @@ const handleSubmit = async () => {
                           Hablemos. Cuéntanos dónde está tu 'ruido' y te diremos cómo podemos sincronizarlo.
                       </p>
                       <p class="text-gray-600 mt-4">
-                          <strong>Email:</strong> hola@synkro.digital<br>
+                          <strong>Email:</strong> hola@Syncro.digital<br>
                           <strong>Oficina:</strong> Barcelona, España
                       </p>
                   </div>

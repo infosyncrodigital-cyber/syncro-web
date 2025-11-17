@@ -3,7 +3,7 @@
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
           <div>
               <a class="text-2xl font-bold text-white tracking-tight" href="#">
-                  Synkro Digital
+                  Syncro Digital
               </a>
               <p class="text-sm mt-2">Sintonía Digital.</p>
           </div>
@@ -16,7 +16,7 @@
               </a>
           </div>
           <div class="mt-8 md:mt-0">
-              <p class="text-sm">&copy; 2025 Synkro Digital. Todos los derechos reservados.</p>
+              <p class="text-sm">&copy; 2025 Syncro Digital. Todos los derechos reservados.</p>
           </div>
       </div>
   </footer>
