@@ -17,7 +17,7 @@ const handleSubmit = async () => {
 
   try {
     // Enviamos los datos a TU backend que tienes corriendo en la otra terminal
-    const response = await fetch('http://localhost:3000/api/enviar', {
+    const response = await fetch('https://syncrodigital.es/api/enviar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ const handleSubmit = async () => {
                           Hablemos. Cuéntanos dónde está tu 'ruido' y te diremos cómo podemos sincronizarlo.
                       </p>
                       <p class="text-gray-600 mt-4">
-                          <strong>Email:</strong> hola@Syncro.digital<br>
+                          <strong>Email:</strong> info@syncrodigital.es<br>
                           <strong>Oficina:</strong> Barcelona, España
                       </p>
                   </div>
