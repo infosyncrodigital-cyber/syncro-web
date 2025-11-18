@@ -8,8 +8,8 @@ const problems = [
     iconPath: 'M15.536 8.464a5 5 0 010 7.072M20 4v.01M4 20v.01M18.364 5.636a9 9 0 010 12.728M5.636 18.364a9 9 0 010-12.728'
   },
   {
-    title: 'Una web que no habla con ventas',
-    description: 'Atraes tráfico, pero tu web no habla con tu CRM ni cualifica los leads.',
+    title: 'Una web desalineada con tus ventas',
+    description: 'Atraes tráfico, pero tu web no está alineada con tu CRM ni cualifica los leads.',
     iconPath: 'M13 17h8m0 0V9m0 8l-8-8-4 4-6-6'
   },
   {
