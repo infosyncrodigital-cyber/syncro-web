@@ -2,9 +2,25 @@ require('dotenv').config(); // Carga las claves secretas
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const PORT = 3000;
+
+// Configuración del Limitador (Anti-Spam/DDoS)
+const limiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hora
+    max: 5, // Máximo 5 peticiones por IP cada hora
+    message: { error: 'Has enviado demasiados mensajes. Por favor, inténtalo de nuevo en una hora.' },
+    standardHeaders: true, // Devuelve info de límites en las cabeceras
+    legacyHeaders: false,
+});
+
+// Aplicar el limitador SOLO a la ruta de enviar correos
+app.use('/api/enviar', limiter);
+
+// Importante: Si usas Nginx como proxy (que lo usas), necesitas esto para que Node vea la IP real del usuario y no la del servidor (127.0.0.1)
+app.set('trust proxy', 1);
 
 // Middleware
 app.use(express.json()); // Permite recibir datos JSON
