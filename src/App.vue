@@ -9,6 +9,7 @@ import Process from './components/Process.vue'
 import Contact from './components/Contact.vue'
 import Footer from './components/Footer.vue'
 import TechStack from './components/TechStack.vue'
+import CookieBanner from './components/CookieBanner.vue'
 </script>
 
 <template>
@@ -25,6 +26,8 @@ import TechStack from './components/TechStack.vue'
   </main>
 
   <Footer />
+
+  <CookieBanner />
 </template>
 
 <style scoped>
