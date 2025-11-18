@@ -51,15 +51,24 @@ const closeMobileMenu = () => {
           </div>
       </div>
 
-      <div v-if="isMobileMenuOpen" class="md:hidden absolute top-16 left-0 w-full bg-white shadow-lg py-4 z-40">
-          <nav class="flex flex-col space-y-4 px-4">
-              <a href="#servicios" @click="closeMobileMenu" class="block text-base font-medium text-gray-700 hover:text-primary transition-colors px-2 py-1 rounded">Servicios</a>
-              <a href="#proceso" @click="closeMobileMenu" class="block text-base font-medium text-gray-700 hover:text-primary transition-colors px-2 py-1 rounded">Proceso</a>
-              <a href="#contacto" @click="closeMobileMenu" class="block text-base font-medium text-gray-700 hover:text-primary transition-colors px-2 py-1 rounded">Contacto</a>
-              <a href="#contacto" @click="closeMobileMenu" class="mt-2 inline-block px-5 py-2 text-sm font-medium text-white bg-primary rounded-full hover:bg-primary-dark transition-shadow text-center">
-                  Empezar Sincronización
-              </a>
-          </nav>
-      </div>
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="transform -translate-y-4 opacity-0"
+        enter-to-class="transform translate-y-0 opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="transform translate-y-0 opacity-100"
+        leave-to-class="transform -translate-y-4 opacity-0"
+      >
+        <div v-if="isMobileMenuOpen" class="md:hidden absolute top-16 left-0 w-full bg-white shadow-lg py-4 z-40 border-b border-gray-100">
+            <nav class="flex flex-col space-y-4 px-4">
+                <a href="#servicios" @click="closeMobileMenu" class="block text-base font-medium text-gray-700 hover:text-primary transition-colors px-2 py-1 rounded hover:bg-gray-50">Servicios</a>
+                <a href="#proceso" @click="closeMobileMenu" class="block text-base font-medium text-gray-700 hover:text-primary transition-colors px-2 py-1 rounded hover:bg-gray-50">Proceso</a>
+                <a href="#contacto" @click="closeMobileMenu" class="block text-base font-medium text-gray-700 hover:text-primary transition-colors px-2 py-1 rounded hover:bg-gray-50">Contacto</a>
+                <a href="#contacto" @click="closeMobileMenu" class="mt-2 inline-block px-5 py-2 text-sm font-medium text-white bg-primary rounded-full hover:bg-primary-dark transition-shadow text-center shadow-md">
+                    Empezar Sincronización
+                </a>
+            </nav>
+        </div>
+      </Transition>
   </header>
 </template>
