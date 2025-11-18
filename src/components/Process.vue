@@ -25,12 +25,14 @@ const steps = [
         <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-300" style="margin-top: -1.75rem; z-index: 0;"></div>
         
         <ProcessStep
-          v-for="step in steps"
+          v-for="(step, index) in steps"
           :key="step.number"
           :number="step.number"
           :title="step.title"
           :description="step.description"
           :is-last="step.isLast"
+          data-aos="zoom-in-up"
+          :data-aos-delay="index * 200"
         />
       </div>
     </div>

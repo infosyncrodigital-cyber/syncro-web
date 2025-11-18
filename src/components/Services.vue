@@ -42,6 +42,8 @@ const services = [
           :key="service.title"
           class="flex flex-col md:flex-row items-center gap-12 md:gap-20"
           :class="{ 'md:flex-row-reverse': index % 2 !== 0 }" 
+          data-aos="fade-up"
+          data-aos-duration="1000"
         >
           <div class="flex-1 w-full relative group">
             <div class="absolute inset-0 bg-gradient-to-r opacity-20 blur-2xl rounded-full transform group-hover:scale-110 transition-transform duration-700" :class="service.color"></div>

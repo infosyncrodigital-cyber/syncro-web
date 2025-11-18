@@ -57,7 +57,7 @@ const handleSubmit = async () => {
           <div class="bg-light rounded-2xl p-8 md:p-16 border border-gray-100 shadow-xl shadow-gray-500/5">
               <div class="grid md:grid-cols-2 gap-16 items-center">
                   
-                  <div class="max-w-md">
+                  <div class="max-w-md" data-aos="fade-right" data-aos-duration="1000">
                       <h2 class="text-3xl md:text-4xl font-bold tracking-tighter text-dark mb-4">
                           ¿Listo para la Sincronización Total?
                       </h2>
@@ -70,7 +70,7 @@ const handleSubmit = async () => {
                       </p>
                   </div>
 
-                  <div>
+                  <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
                       <form @submit.prevent="handleSubmit" class="space-y-6">
                           <div>
                               <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>

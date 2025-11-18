@@ -34,11 +34,13 @@ const problems = [
 
       <div class="grid md:grid-cols-3 gap-8">
         <ProblemCard
-          v-for="problem in problems"
+          v-for="(problem, index) in problems"
           :key="problem.title"
           :title="problem.title"
           :description="problem.description"
           :icon-path="problem.iconPath"
+          data-aos="fade-up"
+          :data-aos-delay="index * 100"
         />
       </div>
     </div>
