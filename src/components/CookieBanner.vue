@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 
 const isVisible = ref(false)
+const emit = defineEmits(['open-policy'])
 
 // Comprobamos si ya ha aceptado/rechazado antes
 onMounted(() => {
@@ -44,7 +45,9 @@ const activateAnalytics = () => {
         <p>
           Usamos cookies propias y de terceros para mejorar tu experiencia y medir el tráfico web. 
           Puedes aceptar o rechazar su uso. Consulta nuestra 
-          <a href="#" class="text-primary underline hover:text-primary-dark">Política de Privacidad</a>.
+          <a href="#" @click.prevent="$emit('open-policy')" class="text-primary underline hover:text-primary-dark">
+            Política de Privacidad
+          </a>.
         </p>
       </div>
 
