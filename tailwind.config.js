@@ -6,7 +6,6 @@ export default {
   ],
   theme: {
     extend: {
-      // ESTO ES LO QUE COPIAMOS DE TU HTML
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
       },
@@ -22,7 +21,6 @@ export default {
         dark: '#111827', // gray-900
         light: '#f9fafb', // gray-50
       }
-      // FIN DE LO COPIADO
     },
   },
   plugins: [],
