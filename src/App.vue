@@ -5,8 +5,10 @@ import Header from './components/Header.vue'
 import Hero from './components/Hero.vue'
 import Problem from './components/Problem.vue'
 import Services from './components/Services.vue'
+import Portfolio from './components/Portfolio.vue'
 import Process from './components/Process.vue'
-// import Testimonial from './components/Testimonial.vue'
+import Testimonial from './components/Testimonial.vue'
+import FAQ from './components/FAQ.vue'
 import Contact from './components/Contact.vue'
 import Footer from './components/Footer.vue'
 import TechStack from './components/TechStack.vue'
@@ -32,9 +34,11 @@ const openLegal = (tab: 'privacy' | 'legal') => {
     <Hero />
     <Problem />
     <Services />
+    <Portfolio />
     <Process />
+    <Testimonial />
     <TechStack />
-    <!-- <Testimonial /> -->
+    <FAQ />
     <Contact />
   </main>
 
