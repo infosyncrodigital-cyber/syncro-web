@@ -13,7 +13,7 @@ const projects = [
   },
   {
     number: '02',
-    title: 'Andrea Saez',
+    title: 'Andrea Sáez',
     category: 'Portfolio Audiovisual',
     description: 'Espacio digital inmersivo para destacar la producción creativa y visual con una narrativa moderna.',
     tags: ['Next.js', 'Showcase', 'Visuals'],
