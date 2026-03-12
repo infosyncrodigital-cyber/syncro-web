@@ -2,27 +2,34 @@
 import ProcessStep from './ProcessStep.vue'
 
 const steps = [
-  { number: 1, title: '1. Auditoría', description: 'Analizamos tu ecosistema digital actual.' },
-  { number: 2, title: '2. Estrategia', description: "Diseñamos tu 'Plan de Sincronización' personalizado." },
-  { number: 3, title: '3. Implementación', description: 'Construimos las conexiones y lanzamos.' },
-  { number: 4, title: '4. Optimización', description: 'Ajustamos y medimos la sintonía en tiempo real.', isLast: true }
+  { number: 1, title: 'Auditoría', description: 'Analizamos tu ecosistema actual identificando fugas de eficiencia.' },
+  { number: 2, title: 'Estrategia', description: "Diseñamos tu 'Plan de Sincronización' único y escalable." },
+  { number: 3, title: 'Implementación', description: 'Construimos las conexiones y lanzamos tu nuevo motor digital.' },
+  { number: 4, title: 'Sintonía', description: 'Optimizamos en tiempo real para un crecimiento sin límites.', isLast: true }
 ]
 </script>
 
 <template>
-  <section id="proceso" class="py-20 md:py-32 bg-light border-t border-b border-gray-200">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-3xl mx-auto text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold tracking-tighter text-dark mb-4">
-          El Plan de Sincronización
+  <section id="proceso" class="py-24 md:py-32 bg-white dark:bg-[#020617] relative transition-colors duration-500">
+    <!-- Top accent line -->
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-black/5 dark:via-white/10 to-transparent"></div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-3xl mx-auto text-center mb-24">
+        <div data-aos="fade-down" class="flex items-center justify-center gap-2 mb-6 uppercase tracking-[0.3em] text-[10px] font-bold text-primary dark:text-primary-light transition-colors duration-500">
+          El Método
+        </div>
+        <h2 data-aos="fade-up" class="text-4xl md:text-6xl font-black tracking-tighter text-black dark:text-white mb-6 leading-none transition-colors duration-500">
+          Plan de <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-800 to-primary dark:from-primary dark:via-white dark:to-primary">Sincronización.</span>
         </h2>
-        <p class="text-lg text-gray-600">
-          Un método transparente en 4 pasos para pasar del caos al control.
+        <p data-aos="fade-up" data-aos-delay="100" class="text-xl text-slate-600 dark:text-slate-400 font-light max-w-2xl mx-auto transition-colors duration-500">
+          Un proceso transparente y riguroso diseñado para llevar tu negocio del ruido al equilibrio digital.
         </p>
       </div>
 
-      <div class="relative grid md:grid-cols-4 gap-x-8">
-        <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-300" style="margin-top: -1.75rem; z-index: 0;"></div>
+      <div class="relative grid md:grid-cols-4 gap-8 md:gap-4">
+        <!-- Connecting line desktop -->
+        <div class="hidden md:block absolute top-12 left-[10%] w-[80%] h-px bg-gradient-to-r from-primary/5 via-primary/20 dark:via-primary/40 to-primary/5 z-0"></div>
         
         <ProcessStep
           v-for="(step, index) in steps"
@@ -31,8 +38,8 @@ const steps = [
           :title="step.title"
           :description="step.description"
           :is-last="step.isLast"
-          data-aos="zoom-in-up"
-          :data-aos-delay="index * 200"
+          data-aos="fade-up"
+          :data-aos-delay="index * 150"
         />
       </div>
     </div>

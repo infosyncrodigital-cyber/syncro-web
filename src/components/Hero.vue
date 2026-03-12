@@ -1,31 +1,31 @@
 <template>
-  <section class="relative min-h-screen flex items-center justify-center bg-[#020617] overflow-hidden text-white w-full max-w-full">
+  <section class="relative min-h-screen flex items-center justify-center bg-white dark:bg-[#020617] overflow-hidden text-black dark:text-white w-full max-w-full transition-colors duration-500">
       
       <!-- Kinetic Background Marquee -->
-      <div class="absolute inset-0 flex flex-col justify-around opacity-[0.03] select-none pointer-events-none z-0 overflow-hidden">
+      <div class="absolute inset-0 flex flex-col justify-around opacity-[0.03] dark:opacity-[0.03] select-none pointer-events-none z-0 overflow-hidden">
         <div class="marquee-wrapper">
-          <div class="marquee-text whitespace-nowrap text-[8rem] sm:text-[12rem] md:text-[15rem] font-black leading-none uppercase">
+          <div class="marquee-text whitespace-nowrap text-[8rem] sm:text-[12rem] md:text-[15rem] font-black leading-none uppercase text-black dark:text-white">
             SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN ·
           </div>
         </div>
         <div class="marquee-wrapper">
-          <div class="marquee-text-reverse whitespace-nowrap text-[8rem] sm:text-[12rem] md:text-[15rem] font-black leading-none uppercase">
+          <div class="marquee-text-reverse whitespace-nowrap text-[8rem] sm:text-[12rem] md:text-[15rem] font-black leading-none uppercase text-black dark:text-white">
             AUTOMATIZACIÓN · CRECIMIENTO · ÉXITO · AUTOMATIZACIÓN · CRECIMIENTO · ÉXITO · AUTOMATIZACIÓN · CRECIMIENTO · ÉXITO · AUTOMATIZACIÓN · CRECIMIENTO · ÉXITO ·
           </div>
         </div>
         <div class="marquee-wrapper">
-          <div class="marquee-text whitespace-nowrap text-[8rem] sm:text-[12rem] md:text-[15rem] font-black leading-none uppercase">
+          <div class="marquee-text whitespace-nowrap text-[8rem] sm:text-[12rem] md:text-[15rem] font-black leading-none uppercase text-black dark:text-white">
             SOFTWARE · SOLUCIONES · FUTURO · SOFTWARE · SOLUCIONES · FUTURO · SOFTWARE · SOLUCIONES · FUTURO · SOFTWARE · SOLUCIONES · FUTURO ·
           </div>
         </div>
       </div>
       
       <!-- Subtle Grid Overlay -->
-      <div class="absolute inset-0 bg-[linear-gradient(theme(colors.blue.900/0.1)_1px,transparent_1px),linear-gradient(90deg,theme(colors.blue.900/0.1)_1px,transparent_1px)] bg-[length:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)] dark:bg-[linear-gradient(theme(colors.blue.900/0.1)_1px,transparent_1px),linear-gradient(90deg,theme(colors.blue.900/0.1)_1px,transparent_1px)] bg-[length:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_70%,transparent_100%)]"></div>
 
       <!-- Hero Glows -->
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[60vw] h-[90vw] md:h-[60vw] bg-primary/20 rounded-full blur-[100px] md:blur-[160px] pointer-events-none"></div>
-      <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] md:w-[40vw] h-[50vw] md:h-[40vw] bg-secondary/10 rounded-full blur-[100px] md:blur-[140px] pointer-events-none"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[60vw] h-[90vw] md:h-[60vw] bg-primary/10 dark:bg-primary/20 rounded-full blur-[100px] md:blur-[160px] pointer-events-none"></div>
+      <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] md:w-[40vw] h-[50vw] md:h-[40vw] bg-secondary/5 dark:bg-secondary/10 rounded-full blur-[100px] md:blur-[140px] pointer-events-none transition-colors duration-500"></div>
 
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full py-20 overflow-hidden">
           
@@ -34,26 +34,26 @@
               <!-- Top Label -->
               <div data-aos="fade-down" class="flex items-center justify-center gap-2 md:gap-3 mb-6 md:mb-10">
                 <div class="h-[1px] w-4 md:w-8 bg-primary/50"></div>
-                <span class="text-[10px] md:text-xs font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase text-primary-light/80 text-center">
-                  Estudio de Sincronía Digital
+                <span class="text-[10px] md:text-xs font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase text-primary-dark dark:text-primary-light/80 text-center">
+                  Consultora de Sincronía Digital
                 </span>
                 <div class="h-[1px] w-4 md:w-8 bg-primary/50"></div>
               </div>
               
               <!-- Main Heading -->
-              <h1 data-aos="fade-up" data-aos-delay="100" class="text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] font-black tracking-tight leading-[1.1] md:leading-[0.95] mb-8 px-2">
+              <h1 data-aos="fade-up" data-aos-delay="100" class="text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] font-black tracking-tight leading-[1.1] md:leading-[0.95] mb-8 px-2 transition-colors duration-500 text-black dark:text-white">
                   Tu negocio en
                   <span class="block mt-2 relative inline-block">
-                    <span class="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-white via-primary-light to-white">perfecta sintonía.</span>
+                    <span class="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-black via-primary to-black dark:from-white dark:via-primary-light dark:to-white">perfecta sintonía.</span>
                     <!-- Neon Underline Effect -->
-                    <div class="absolute -bottom-1 md:-bottom-2 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent blur-[2px]"></div>
-                    <div class="absolute -bottom-1 md:-bottom-2 left-0 w-full h-[1px] bg-primary"></div>
+                    <div class="absolute -bottom-2 md:-bottom-5 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent blur-[2px]"></div>
+                    <div class="absolute -bottom-2 md:-bottom-5 left-0 w-full h-[1px] bg-primary"></div>
                   </span>
               </h1>
               
               <!-- Description -->
-              <p data-aos="fade-up" data-aos-delay="200" class="text-lg md:text-2xl text-slate-400 max-w-3xl mx-auto mb-12 md:mb-16 font-light leading-relaxed px-4">
-                  Creamos ecosistemas digitales donde <span class="text-white font-medium">redes, web y procesos</span> convergen para impulsar tu marca sin límites.
+              <p data-aos="fade-up" data-aos-delay="200" class="text-lg md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mb-12 md:mb-16 font-light leading-relaxed px-4 transition-colors duration-500">
+                  Creamos ecosistemas digitales donde <span class="text-black dark:text-white font-medium">redes, web y procesos</span> convergen para impulsar tu marca sin límites.
               </p>
               
               <!-- Action Group -->
@@ -70,9 +70,9 @@
                 </a>
 
                 <!-- Secondary Action -->
-                <a href="#portfolio" class="text-xs md:text-sm font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors flex items-center gap-2 group py-2">
+                <a href="#portfolio" class="text-xs md:text-sm font-bold tracking-widest uppercase text-black/40 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors flex items-center gap-2 group py-2 duration-500">
                   Explorar Portfolio
-                  <div class="h-[1px] w-0 bg-white group-hover:w-8 transition-all duration-300"></div>
+                  <div class="h-[1px] w-0 bg-black dark:bg-white group-hover:w-8 transition-all duration-300"></div>
                 </a>
               </div>
 
@@ -80,7 +80,7 @@
       </div>
 
       <!-- Bottom Gradient Mask -->
-      <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#020617] to-transparent z-10"></div>
+      <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white dark:from-[#020617] to-transparent z-10 transition-colors duration-500"></div>
   </section>
 </template>
 

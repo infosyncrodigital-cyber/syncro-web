@@ -1,22 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Send, ArrowUpRight } from 'lucide-vue-next'
 
-// 1. Variables para guardar lo que escribe el usuario
 const name = ref('')
 const email = ref('')
 const message = ref('')
 
-// 2. Variables para controlar el estado (si está cargando, si hubo error, etc.)
-const formState = ref('idle') // estados: 'idle' | 'loading' | 'success' | 'error'
+const formState = ref('idle') // idle | loading | success | error
 const formMessage = ref('')
 
-// 3. Función que se ejecuta al dar click en "Empezar Sincronización"
 const handleSubmit = async () => {
   formState.value = 'loading'
   formMessage.value = ''
 
   try {
-    // Enviamos los datos a TU backend que tienes corriendo en la otra terminal
     const response = await fetch('https://syncrodigital.es/api/enviar', {
       method: 'POST',
       headers: {
@@ -29,91 +26,105 @@ const handleSubmit = async () => {
       }),
     })
 
-    if (!response.ok) {
-      throw new Error('Error en la respuesta del servidor')
-    }
+    if (!response.ok) throw new Error('Error en el servidor')
 
-    // Si todo sale bien:
     formState.value = 'success'
-    formMessage.value = '¡Mensaje enviado correctamente! Nos pondremos en contacto pronto.'
-    
-    // Limpiamos el formulario
+    formMessage.value = '¡Sincronización iniciada! Nos pondremos en contacto pronto.'
     name.value = ''
     email.value = ''
     message.value = ''
 
   } catch (error) {
-    // Si algo falla:
     console.error(error)
     formState.value = 'error'
-    formMessage.value = 'Hubo un error al enviar el mensaje. Por favor, inténtalo de nuevo.'
+    formMessage.value = 'Error al enviar. Por favor, inténtalo de nuevo.'
   }
 }
 </script>
 
 <template>
-  <section id="contacto" class="py-20 md:py-32 bg-white">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="bg-light rounded-2xl p-8 md:p-16 border border-gray-100 shadow-xl shadow-gray-500/5">
-              <div class="grid md:grid-cols-2 gap-16 items-center">
-                  
-                  <div class="max-w-md" data-aos="fade-right" data-aos-duration="1000">
-                      <h2 class="text-3xl md:text-4xl font-bold tracking-tighter text-dark mb-4">
-                          ¿Listo para la Sincronización Total?
-                      </h2>
-                      <p class="text-lg text-gray-600 mb-6">
-                          Hablemos. Cuéntanos dónde está tu 'ruido' y te diremos cómo podemos sincronizarlo.
-                      </p>
-                      <p class="text-gray-600 mt-4">
-                          <strong>Email:</strong> info@syncrodigital.es<br>
-                          <strong>Oficina:</strong> Barcelona, España
-                      </p>
-                  </div>
+  <section id="contacto" class="py-24 md:py-32 bg-white dark:bg-[#020617] relative overflow-hidden transition-colors duration-500">
+    <!-- Background accents -->
+    <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-primary/5 dark:bg-primary/10 rounded-full blur-[140px] pointer-events-none transition-colors duration-500"></div>
 
-                  <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
-                      <form @submit.prevent="handleSubmit" class="space-y-6">
-                          <div>
-                              <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
-                              <input type="text" name="name" id="name" required v-model="name"
-                                     :disabled="formState === 'loading'"
-                                     class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50">
-                          </div>
-                          
-                          <div>
-                              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                              <input type="email" name="email" id="email" required v-model="email"
-                                     :disabled="formState === 'loading'"
-                                     class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50">
-                          </div>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="bg-slate-50 dark:bg-white/5 backdrop-blur-3xl border border-black/5 dark:border-white/10 p-10 md:p-20 relative overflow-hidden transition-all duration-500">
+        
+        <!-- Subtle line decoration -->
+        <div class="absolute top-0 right-0 w-32 h-32 border-t-2 border-r-2 border-primary/20 transition-all duration-700"></div>
 
-                          <div>
-                              <label for="message" class="block text-sm font-medium text-gray-700">Háblame de tu proyecto...</label>
-                              <textarea name="message" id="message" rows="4" required v-model="message"
-                                      :disabled="formState === 'loading'"
-                                      class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary disabled:opacity-50" placeholder="Ej: Mis redes no conectan con mi web, pierdo mucho tiempo en tareas manuales..."></textarea>
-                          </div>
+        <div class="grid lg:grid-cols-2 gap-20 items-start">
+            
+            <div data-aos="fade-right">
+                <div class="flex items-center gap-3 mb-8">
+                  <div class="h-[1px] w-12 bg-primary"></div>
+                  <span class="text-xs font-bold tracking-[0.3em] uppercase text-primary dark:text-primary-light transition-colors duration-500">Contacto Directo</span>
+                </div>
+                <h2 class="text-5xl md:text-7xl font-black text-black dark:text-white tracking-tighter leading-none mb-10 transition-colors duration-500">
+                    ¿Hablamos de tu <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-800 to-primary dark:from-primary dark:via-white dark:to-primary">proyecto?</span>
+                </h2>
+                <div class="space-y-8 text-lg text-slate-600 dark:text-slate-400 font-light transition-colors duration-500">
+                    <p>Cuéntanos dónde está tu 'ruido' y te diremos cómo podemos sincronizarlo hacia el éxito.</p>
+                    <div class="space-y-4 pt-4">
+                        <div class="flex items-center gap-4 text-black dark:text-white font-bold transition-colors duration-500">
+                            <span class="w-10 h-[1px] bg-primary/40"></span>
+                            info@syncrodigital.es
+                        </div>
+                        <div class="flex items-center gap-4 text-black dark:text-white font-bold transition-colors duration-500">
+                            <span class="w-10 h-[1px] bg-primary/40"></span>
+                            Barcelona, España
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                          <div>
-                              <button type="submit" 
-                                      :disabled="formState === 'loading'"
-                                      class="w-full px-8 py-3 text-lg font-medium text-white bg-secondary rounded-full hover:bg-emerald-600 transition-all shadow-lg hover:shadow-emerald-300/30 transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none">
-                                  <span v-if="formState === 'loading'">Enviando...</span>
-                                  <span v-else>Empezar Sincronización</span>
-                              </button>
-                          </div>
+            <div data-aos="fade-left" data-aos-delay="200" class="relative">
+                <form @submit.prevent="handleSubmit" class="space-y-8">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold tracking-widest uppercase text-slate-500 dark:text-slate-500 ml-1 transition-colors duration-500">Nombre Completo</label>
+                        <input type="text" required v-model="name" :disabled="formState === 'loading'"
+                               class="w-full bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 px-6 py-4 text-black dark:text-white focus:outline-none focus:border-primary transition-all duration-300 placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                               placeholder="Tu nombre">
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold tracking-widest uppercase text-slate-500 dark:text-slate-500 ml-1 transition-colors duration-500">Email Profesional</label>
+                        <input type="email" required v-model="email" :disabled="formState === 'loading'"
+                               class="w-full bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 px-6 py-4 text-black dark:text-white focus:outline-none focus:border-primary transition-all duration-300 placeholder:text-slate-400 dark:placeholder:text-slate-600"
+                               placeholder="email@tuempresa.com">
+                    </div>
 
-                          <div v-if="formState === 'success'" class="p-4 rounded bg-green-100 text-green-700 text-center">
-                              {{ formMessage }}
-                          </div>
-                          <div v-if="formState === 'error'" class="p-4 rounded bg-red-100 text-red-700 text-center">
-                              {{ formMessage }}
-                          </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold tracking-widest uppercase text-slate-500 dark:text-slate-500 ml-1 transition-colors duration-500">Desafío del Proyecto</label>
+                        <textarea rows="4" required v-model="message" :disabled="formState === 'loading'"
+                                  class="w-full bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 px-6 py-4 text-black dark:text-white focus:outline-none focus:border-primary transition-all duration-300 placeholder:text-slate-400 dark:placeholder:text-slate-600 resize-none"
+                                  placeholder="¿Qué necesitas sincronizar?"></textarea>
+                    </div>
 
-                      </form>
-                  </div>
-                  
-              </div>
-          </div>
+                    <div>
+                        <button type="submit" :disabled="formState === 'loading'"
+                                class="w-full group flex items-center justify-center gap-4 px-10 py-6 bg-black dark:bg-white text-white dark:text-black font-black tracking-widest uppercase text-sm transition-all duration-500 hover:bg-primary dark:hover:bg-primary hover:text-white dark:hover:text-white disabled:opacity-50">
+                            <span v-if="formState === 'loading'">Procesando...</span>
+                            <span v-else class="flex items-center gap-3">
+                                Enviar Mensaje
+                                <Send class="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                            </span>
+                        </button>
+                    </div>
+
+                    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0 translateY-4">
+                      <div v-if="formState === 'success'" class="p-6 bg-primary/10 border border-primary/20 text-primary dark:text-primary-light font-bold text-center">
+                          {{ formMessage }}
+                      </div>
+                    </Transition>
+                    
+                    <div v-if="formState === 'error'" class="p-6 bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-500 font-bold text-center">
+                        {{ formMessage }}
+                    </div>
+                </form>
+            </div>
+        </div>
       </div>
+    </div>
   </section>
 </template>

@@ -10,13 +10,13 @@ const techs = [
 </script>
 
 <template>
-  <section class="py-16 bg-gray-50 border-t border-gray-200">
+  <section class="py-20 bg-white dark:bg-[#020617] relative border-t border-black/5 dark:border-white/5 transition-colors duration-500">
     <div class="max-w-6xl mx-auto px-4 text-center">
-      <h3 class="text-2xl font-bold text-gray-800 mb-8">Potenciado por tecnología moderna</h3>
-      <div class="flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-        <div v-for="(tech, index) in techs" :key="tech.name" class="flex flex-col items-center group" data-aos="fade-in" :data-aos-delay="index * 100">
-          <img :src="tech.icon" :alt="`Logo ${tech.name}`" class="h-12 w-12 mb-2 transform group-hover:scale-110 transition-transform">
-          <span class="text-xs font-medium text-gray-500">{{ tech.name }}</span>
+      <h3 class="text-xs font-bold tracking-[0.3em] uppercase text-slate-400 dark:text-slate-500 mb-12 transition-colors duration-500">Potenciado por tecnología de vanguardia</h3>
+      <div class="flex flex-wrap justify-center gap-10 md:gap-20 items-center opacity-40 grayscale group/grid hover:opacity-100 transition-all duration-700">
+        <div v-for="(tech, index) in techs" :key="tech.name" class="flex flex-col items-center group/item hover:grayscale-0 transition-all duration-500" data-aos="fade-up" :data-aos-delay="index * 100">
+          <img :src="tech.icon" :alt="`Logo ${tech.name}`" class="h-10 w-10 md:h-12 md:w-12 mb-4 transform group-hover/item:scale-125 transition-transform duration-500">
+          <span class="text-[10px] font-bold tracking-widest uppercase text-black/40 dark:text-white/40 group-hover/item:text-black dark:group-hover/item:text-white transition-colors duration-500">{{ tech.name }}</span>
         </div>
       </div>
     </div>

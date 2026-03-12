@@ -29,35 +29,38 @@ const toggle = (index: number) => {
 </script>
 
 <template>
-  <section id="faq" class="py-24 bg-white">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section id="faq" class="py-24 md:py-32 bg-white dark:bg-[#020617] relative transition-colors duration-500">
+    <!-- Top accent line -->
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-black/5 dark:via-white/10 to-transparent transition-colors duration-500"></div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-5xl font-bold tracking-tighter text-dark mb-4">
-          Preguntas <span class="text-primary">Frecuentes</span>
+      <div class="text-center mb-20">
+        <div data-aos="fade-down" class="flex items-center justify-center gap-3 mb-6 uppercase tracking-[0.3em] text-[10px] font-bold text-primary dark:text-primary-light transition-colors duration-500">
+          Claridad Total
+        </div>
+        <h2 data-aos="fade-up" class="text-4xl md:text-6xl font-black tracking-tighter text-black dark:text-white mb-6 leading-none transition-colors duration-500">
+          Preguntas <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-800 to-primary dark:from-primary dark:via-white dark:to-primary">Frecuentes.</span>
         </h2>
-        <p class="text-lg text-gray-600">
-          Resolvemos tus dudas antes de que te las plantees.
-        </p>
       </div>
 
       <div class="space-y-4">
         <div 
           v-for="(faq, index) in faqs" 
           :key="index"
-          class="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300"
-          :class="openIndex === index ? 'bg-gray-50 border-primary shadow-md' : 'bg-white hover:border-blue-300'"
+          class="border border-black/5 dark:border-white/10 overflow-hidden transition-all duration-500"
+          :class="openIndex === index ? 'bg-slate-50 dark:bg-white/5 shadow-2xl shadow-primary/5' : 'bg-transparent hover:border-primary/50'"
         >
           <button 
             @click="toggle(index)"
-            class="w-full flex items-center justify-between p-6 text-left focus:outline-none"
+            class="w-full flex items-center justify-between p-8 text-left focus:outline-none group"
           >
-            <span class="text-lg font-bold text-dark" :class="openIndex === index ? 'text-primary' : ''">
+            <span class="text-xl font-bold transition-colors duration-300" :class="openIndex === index ? 'text-primary dark:text-primary-light' : 'text-black dark:text-white'">
               {{ faq.question }}
             </span>
             <div 
-              class="flex-shrink-0 ml-4 w-8 h-8 flex items-center justify-center rounded-full transition-colors duration-200"
-              :class="openIndex === index ? 'bg-primary text-white' : 'bg-gray-100 text-gray-500'"
+              class="flex-shrink-0 ml-4 w-10 h-10 flex items-center justify-center transition-all duration-300"
+              :class="openIndex === index ? 'bg-primary text-white rotate-180' : 'bg-black/5 dark:bg-white/5 text-slate-400 dark:text-slate-500'"
             >
               <Minus v-if="openIndex === index" class="w-5 h-5" />
               <Plus v-else class="w-5 h-5" />
@@ -66,7 +69,7 @@ const toggle = (index: number) => {
           
           <div 
             v-show="openIndex === index"
-            class="px-6 pb-6 text-gray-600 leading-relaxed animate-fade-in-down"
+            class="px-8 pb-8 text-slate-600 dark:text-slate-400 text-lg font-light leading-relaxed animate-fade-in-down transition-colors duration-500"
           >
             {{ faq.answer }}
           </div>
@@ -79,7 +82,7 @@ const toggle = (index: number) => {
 
 <style scoped>
 .animate-fade-in-down {
-  animation: fadeInDown 0.3s ease-out;
+  animation: fadeInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fadeInDown {
