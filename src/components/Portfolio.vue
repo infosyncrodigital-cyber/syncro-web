@@ -3,12 +3,20 @@ import { ExternalLink, ArrowRight } from 'lucide-vue-next';
 
 const projects = [
   {
-    title: 'Nuudo Shop',
+    title: 'Nudō Shop',
     category: 'E-Commerce Artesanal',
-    description: 'Esenciales minimalistas para bebés y mamás. Una experiencia de compra suave y moderna para una marca que cose a mano piezas únicas en España.',
+    description: 'Diseñan y cosen piezas únicas para acompañarte en lo cotidiano.',
     tags: ['Vue.js', 'Diseño Minimalista', 'E-Commerce'],
     gradient: 'from-stone-400 to-stone-600', // Colores más tierra/neutros para Nuudo
-    link: 'https://nuudo.syncrodigital.es'
+    link: 'https://nudobcn.com'
+  },
+  {
+    title: 'Andrea Saez Montero',
+    category: 'Portfolio Web',
+    description: 'Portfolio web para estudiante de Comunicación Audiovisual, diseñado para destacar sus proyectos visuales y creativos.',
+    tags: ['Portfolio', 'Audiovisual', 'Diseño Web'],
+    gradient: 'from-indigo-400 to-purple-600', // Colores atractivos para portfolio
+    link: 'https://andreasaezmontero.es'
   },
   {
     title: 'Beauty Salon Manager',
