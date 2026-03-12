@@ -1,11 +1,11 @@
 <template>
-  <section class="relative min-h-screen flex items-center justify-center bg-[#020617] overflow-hidden text-white w-full">
+  <section class="relative min-h-screen flex items-center justify-center bg-[#020617] overflow-hidden text-white w-full max-w-full">
       
       <!-- Kinetic Background Marquee -->
       <div class="absolute inset-0 flex flex-col justify-around opacity-[0.03] select-none pointer-events-none z-0 overflow-hidden">
         <div class="marquee-wrapper">
           <div class="marquee-text whitespace-nowrap text-[8rem] sm:text-[12rem] md:text-[15rem] font-black leading-none uppercase">
-            SINCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SINCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SINCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SINCRO DIGITAL · ESTRATEGIA · INNOVACIÓN ·
+            SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN ·
           </div>
         </div>
         <div class="marquee-wrapper">
@@ -27,7 +27,7 @@
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[60vw] h-[90vw] md:h-[60vw] bg-primary/20 rounded-full blur-[100px] md:blur-[160px] pointer-events-none"></div>
       <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] md:w-[40vw] h-[50vw] md:h-[40vw] bg-secondary/10 rounded-full blur-[100px] md:blur-[140px] pointer-events-none"></div>
 
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full py-20 overflow-x-hidden">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full py-20 overflow-hidden">
           
           <div class="max-w-5xl mx-auto text-center">
               
