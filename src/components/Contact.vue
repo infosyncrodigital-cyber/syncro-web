@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Send, ArrowUpRight } from 'lucide-vue-next'
+import { Send } from 'lucide-vue-next'
 
 const name = ref('')
 const email = ref('')

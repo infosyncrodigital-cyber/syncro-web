@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Share2, Monitor, Zap, ArrowRight, ArrowUpRight } from 'lucide-vue-next';
+import { Share2, Monitor, Zap, ArrowUpRight } from 'lucide-vue-next';
 
 const services = [
   {
