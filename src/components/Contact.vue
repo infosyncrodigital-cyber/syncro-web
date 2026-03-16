@@ -14,7 +14,7 @@ const handleSubmit = async () => {
   formMessage.value = ''
 
   try {
-    const response = await fetch('https://syncrodigital.es/api/enviar', {
+    const response = await fetch('/api/enviar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,7 +26,16 @@ const handleSubmit = async () => {
       }),
     })
 
-    if (!response.ok) throw new Error('Error en el servidor')
+    if (!response.ok) {
+      let errorMessage = 'Error en el servidor'
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData.details || errorMessage
+      } catch {
+        // Response body is empty or not valid JSON
+      }
+      throw new Error(errorMessage)
+    }
 
     formState.value = 'success'
     formMessage.value = '¡Sincronización iniciada! Nos pondremos en contacto pronto.'
@@ -34,10 +43,10 @@ const handleSubmit = async () => {
     email.value = ''
     message.value = ''
 
-  } catch (error) {
+  } catch (error: any) {
     console.error(error)
     formState.value = 'error'
-    formMessage.value = 'Error al enviar. Por favor, inténtalo de nuevo.'
+    formMessage.value = error.message || 'Error al enviar. Por favor, inténtalo de nuevo.'
   }
 }
 </script>

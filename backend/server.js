@@ -7,36 +7,31 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = 3000;
 
-// Configuración del Limitador (Anti-Spam/DDoS)
+// Middleware global
+app.use(cors()); // CORS estándar para cuando estemos en producción
+app.use(express.json());
+
+// Configuración del Limitador (DESACTIVADO PARA PRUEBAS)
+/*
 const limiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hora
-    max: 5, // Máximo 5 peticiones por IP cada hora
-    message: { error: 'Has enviado demasiados mensajes. Por favor, inténtalo de nuevo en una hora.' },
-    standardHeaders: true, // Devuelve info de límites en las cabeceras
+    windowMs: 1 * 60 * 1000, 
+    max: 100, 
+    message: { error: 'Demasiadas peticiones. Inténtalo en un minuto.' },
+    standardHeaders: true, 
     legacyHeaders: false,
 });
 
-// Aplicar el limitador SOLO a la ruta de enviar correos
 app.use('/api/enviar', limiter);
-
-// Importante: Si usas Nginx como proxy (que lo usas), necesitas esto para que Node vea la IP real del usuario y no la del servidor (127.0.0.1)
-app.set('trust proxy', 1);
-
-// Middleware
-app.use(express.json()); // Permite recibir datos JSON
-app.use(cors()); // Permite que el Frontend (puerto 5173) hable con el Backend (puerto 3000)
+*/
 
 // Configuración de DonDominio (SMTP)
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST, 
-    port: 587, // Puerto seguro SSL habitual en DonDominio
+    port: 587, 
     secure: false, 
     auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS
-    },
-    tls: {
-        ciphers: 'SSLv3'
     }
 });
 
@@ -77,8 +72,16 @@ app.post('/api/enviar', async (req, res) => {
         res.status(200).json({ message: 'Email enviado correctamente' });
 
     } catch (error) {
-        console.error('❌ Error enviando email:', error);
-        res.status(500).json({ error: 'No se pudo enviar el email' });
+        console.error('❌ Error detallado enviando email:', {
+            message: error.message,
+            code: error.code,
+            command: error.command,
+            response: error.response
+        });
+        res.status(500).json({ 
+            error: 'No se pudo enviar el email',
+            details: error.message 
+        });
     }
 });
 
