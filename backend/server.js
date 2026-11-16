@@ -2,20 +2,24 @@ require('dotenv').config();
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
+const { rateLimit, ipKeyGenerator } = require('express-rate-limit');
 
 const app = express();
 const PORT = 3000;
 
-// nginx sits in front: trust its X-Forwarded-For so the limiter sees real IPs
-app.set('trust proxy', 1);
 app.use(cors({ origin: ['https://syncrodigital.es', 'https://www.syncrodigital.es', 'http://localhost:5173'] }));
 app.use(express.json({ limit: '20kb' }));
 
-// 5 messages every 10 minutes per IP
+// The site goes Cloudflare -> nginx -> here, and nginx does not forward the
+// visitor's IP. Cloudflare sends it in CF-Connecting-IP; without it (local
+// tests) fall back to the socket address.
+const visitorIp = (req) => req.get('cf-connecting-ip') || req.socket.remoteAddress || 'unknown';
+
+// 5 messages every 10 minutes per visitor
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,
   limit: 5,
+  keyGenerator: (req) => ipKeyGenerator(visitorIp(req)),
   standardHeaders: 'draft-7',
   legacyHeaders: false,
   message: { error: 'Has enviado varios mensajes seguidos. Prueba de nuevo en unos minutos.' },
