@@ -46,7 +46,7 @@ const tiles = [
       </div>
 
       <h1 id="hero-title" class="display title">
-        <span class="line"><span>Webs que salen</span></span>
+        <span class="line"><span>Webs que salen </span></span>
         <span class="line"><span>en Google.</span></span>
       </h1>
     </div>
