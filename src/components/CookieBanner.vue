@@ -1,63 +1,65 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-const isVisible = ref(false)
-const emit = defineEmits(['open-policy'])
+import { onMounted } from 'vue'
+import { ui, openLegal } from '../store'
+import { readConsent, saveConsent, loadAnalytics } from '../analytics'
 
 onMounted(() => {
-  const consent = localStorage.getItem('cookie-consent')
-  if (!consent) {
-    isVisible.value = true
-  } else if (consent === 'accepted') {
-    activateAnalytics()
-  }
+  const c = readConsent()
+  if (c === 'accepted') loadAnalytics()
+  else if (c === null) ui.cookiesOpen = true
 })
 
-const acceptCookies = () => {
-  localStorage.setItem('cookie-consent', 'accepted')
-  isVisible.value = false
-  activateAnalytics()
-}
-
-const declineCookies = () => {
-  localStorage.setItem('cookie-consent', 'declined')
-  isVisible.value = false
-}
-
-const activateAnalytics = () => {
-  console.log('Cookies aceptadas. Analytics activo.')
+function choose(v: 'accepted' | 'declined') {
+  saveConsent(v)
+  ui.cookiesOpen = false
+  if (v === 'declined' && document.cookie.includes('_ga')) {
+    // analytics was on before: reload so it stops running
+    location.reload()
+  }
 }
 </script>
 
 <template>
-  <Transition
-    enter-active-class="transition duration-500 ease-out"
-    enter-from-class="translate-y-full"
-    enter-to-class="translate-y-0"
-  >
-    <div v-if="isVisible" class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-[#020617]/90 backdrop-blur-2xl border-t border-black/5 dark:border-white/10 p-6 z-50 shadow-[0_-20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_-20px_50px_rgba(0,0,0,0.5)] transition-colors duration-500">
-      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-        
-        <div class="text-sm text-slate-600 dark:text-slate-400 md:max-w-3xl font-light leading-relaxed transition-colors duration-500">
-          <p>
-            Utilizamos cookies para optimizar tu experiencia y sincronizar nuestro contenido con tus intereses. 
-            Puedes personalizar tu elección aquí o consultar nuestra 
-            <a href="#" @click.prevent="$emit('open-policy')" class="text-black dark:text-white underline font-bold hover:text-primary transition-colors">
-              Política de Privacidad
-            </a>.
-          </p>
-        </div>
-
-        <div class="flex gap-4 w-full md:w-auto">
-          <button @click="declineCookies" class="flex-1 md:flex-none px-6 py-3 text-xs font-black tracking-widest uppercase text-slate-400 border border-black/10 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
-            Rechazar
-          </button>
-          <button @click="acceptCookies" class="flex-1 md:flex-none px-6 py-3 text-xs font-black tracking-widest uppercase text-white dark:text-black bg-black dark:bg-white hover:bg-primary dark:hover:bg-primary hover:text-white dark:hover:text-white transition-all">
-            Aceptar Sincronización
-          </button>
-        </div>
-
+  <Transition name="up">
+    <div v-if="ui.cookiesOpen" class="cookies" role="dialog" aria-live="polite" aria-labelledby="cookies-text">
+      <p id="cookies-text" class="text">
+        Uso cookies de Google Analytics para saber cuánta gente visita la web, solo si las aceptas.
+        <a href="#" class="link" @click.prevent="openLegal('cookies')">Más información</a>
+      </p>
+      <div class="buttons">
+        <button type="button" class="btn btn-black" @click="choose('declined')">Rechazar</button>
+        <button type="button" class="btn btn-black" @click="choose('accepted')">Aceptar</button>
       </div>
     </div>
   </Transition>
 </template>
+
+<style scoped>
+.cookies {
+  position: fixed;
+  right: var(--m);
+  bottom: var(--m);
+  width: min(30rem, calc(100% - 2 * var(--m)));
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 32px;
+  flex-wrap: wrap;
+  padding: 20px 24px;
+  background: var(--yellow);
+  color: var(--black);
+  box-shadow: 0 16px 48px rgb(0 0 0 / 0.3); /* taste-skill-ignore: consent overlay floats */
+}
+.text { margin: 0; max-width: 60ch; }
+.buttons { display: flex; gap: 12px; }
+.up-enter-active, .up-leave-active { transition: transform 0.4s var(--ease-out), opacity 0.3s; }
+.up-enter-from, .up-leave-to { transform: translateY(24px); opacity: 0; }
+
+@media (max-width: 600px) {
+  .cookies { padding: 14px 16px; gap: 12px; bottom: 12px; }
+  .text { font-size: var(--step-small); }
+  .buttons { width: 100%; }
+  .buttons .btn { flex: 1; min-height: 44px; padding-block: 0.6em; }
+}
+</style>

@@ -1,37 +1,139 @@
 @tailwind base;
-@tailwind components;
 @tailwind utilities;
 
-/* Prevenir desbordamiento horizontal global */
-html, body {
-  overflow-x: hidden !important;
-  width: 100vw;
-  position: relative;
-  margin: 0;
-  padding: 0;
-  transition: background-color 0.5s ease, color 0.5s ease;
+/* ------------------------------------------------------------------
+   Tokens
+   ------------------------------------------------------------------ */
+:root {
+  --blue: #1423b8;
+  --blue-2: #1220a6;
+  --ink: #ffffff;
+  --muted: #c3c9f3;
+  --black: #000000;
+  --yellow: #f7dd47;
+  --pink: #e9479f;
+  --paper: #ffffff;
+
+  --display: 'Gambarino', 'Times New Roman', serif;
+  --text: 'General Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* five sizes, nothing in between */
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-head: clamp(1.875rem, 1.1rem + 2.6vw, 3.25rem);
+  --step-display: clamp(3.5rem, 1.4rem + 8.1vw, 8rem);
+
+  --m: clamp(16px, 2.2vw, 32px);          /* outer margin, used everywhere */
+  --gap: clamp(16px, 2vw, 28px);
+  --section: clamp(96px, 12vw, 200px);      /* space between sections */
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Pequeños ajustes adicionales */
-body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-/* Patrón de grid sutil para el Hero (Simplificado para evitar errores de parseo) */
-.hero-grid-pattern {
-    background-image:
-        linear-gradient(to right, rgba(200, 200, 200, 0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(200, 200, 200, 0.1) 1px, transparent 1px);
-    background-size: 3rem 3rem;
-}
-
-/* Efecto de desplazamiento suave para toda la web */
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
-/* Un pequeño ajuste para que el header fijo no tape el título al hacer scroll */
-html {
-  scroll-padding-top: 5rem;
+body {
+  margin: 0;
+  background: var(--blue);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: var(--step-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+::selection { background: var(--yellow); color: var(--black); }
+
+:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+img { display: block; max-width: 100%; }
+
+/* ------------------------------------------------------------------
+   Shared pieces
+   ------------------------------------------------------------------ */
+.wrap { padding-inline: var(--m); }
+
+.display {
+  font-family: var(--display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.head {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--step-head);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.lead { font-size: var(--step-lead); line-height: 1.35; }
+.small { font-size: var(--step-small); }
+
+/* One button shape for the whole page: square corners, one fill */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  min-height: 52px;
+  padding: 0.85em 1.6em;
+  font: 500 var(--step-body)/1 var(--text);
+  text-decoration: none;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-out), background-color 0.2s, color 0.2s;
+}
+.btn:active { transform: translateY(1px) scale(0.98); }
+.btn-yellow { background: var(--yellow); color: var(--black); }
+.btn-yellow:hover { background: var(--paper); }
+.btn-black { background: var(--black); color: var(--paper); }
+.btn-black:hover { background: var(--blue); }
+.btn .arrow { transition: transform 0.25s var(--ease-out); }
+.btn:hover .arrow { transform: translateX(4px); }
+.btn:disabled { opacity: 0.6; cursor: progress; }
+
+.link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-thickness 0.15s, color 0.15s;
+}
+.link:hover { text-decoration-thickness: 3px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* ------------------------------------------------------------------
+   Entrances: hidden only while the script is running
+   ------------------------------------------------------------------ */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease-out), transform 0.9s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js [data-reveal] { transform: none; transition: opacity 0.3s linear; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }

@@ -1,47 +1,74 @@
 <script setup lang="ts">
-import ProcessStep from './ProcessStep.vue'
-
-const steps = [
-  { number: 1, title: 'Auditoría', description: 'Analizamos tu ecosistema actual identificando fugas de eficiencia.' },
-  { number: 2, title: 'Estrategia', description: "Diseñamos tu 'Plan de Sincronización' único y escalable." },
-  { number: 3, title: 'Implementación', description: 'Construimos las conexiones y lanzamos tu nuevo motor digital.' },
-  { number: 4, title: 'Sintonía', description: 'Optimizamos en tiempo real para un crecimiento sin límites.', isLast: true }
+// Segment widths follow how long each stage really takes (in working days).
+const stages = [
+  { time: 'Media hora', grow: 0.1, color: 'var(--yellow)', ink: 'var(--black)', text: 'Primero, una llamada para ver qué necesitas y darte un precio cerrado.' },
+  { time: 'Unas dos semanas', grow: 10, color: 'var(--paper)', ink: 'var(--black)', text: 'Después diseño y programo la web con tus textos y tus fotos.' },
+  { time: 'Una semana', grow: 5, color: 'var(--pink)', ink: 'var(--black)', text: 'Luego la revisas en una dirección de prueba y ajusto lo que haga falta.' },
+  { time: 'Un día', grow: 1, color: 'var(--black)', ink: 'var(--paper)', text: 'Por último la publico, la doy de alta en Google y dejo tu ficha al día.' },
 ]
 </script>
 
 <template>
-  <section id="proceso" class="py-24 md:py-32 bg-white dark:bg-[#020617] relative transition-colors duration-500">
-    <!-- Top accent line -->
-    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-black/5 dark:via-white/10 to-transparent"></div>
+  <section id="como-trabajo" class="process wrap" aria-labelledby="proceso-title">
+    <h2 id="proceso-title" class="display title" v-reveal>De la llamada a Google</h2>
 
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="max-w-3xl mx-auto text-center mb-24">
-        <div data-aos="fade-down" class="flex items-center justify-center gap-2 mb-6 uppercase tracking-[0.3em] text-[10px] font-bold text-primary dark:text-primary-light transition-colors duration-500">
-          El Método
-        </div>
-        <h2 data-aos="fade-up" class="text-4xl md:text-6xl font-black tracking-tighter text-black dark:text-white mb-6 leading-none transition-colors duration-500">
-          Plan de <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-800 to-primary dark:from-primary dark:via-white dark:to-primary">Sincronización.</span>
-        </h2>
-        <p data-aos="fade-up" data-aos-delay="100" class="text-xl text-slate-600 dark:text-slate-400 font-light max-w-2xl mx-auto transition-colors duration-500">
-          Un proceso transparente y riguroso diseñado para llevar tu negocio del ruido al equilibrio digital.
-        </p>
-      </div>
-
-      <div class="relative grid md:grid-cols-4 gap-8 md:gap-4">
-        <!-- Connecting line desktop -->
-        <div class="hidden md:block absolute top-12 left-[10%] w-[80%] h-px bg-gradient-to-r from-primary/5 via-primary/20 dark:via-primary/40 to-primary/5 z-0"></div>
-        
-        <ProcessStep
-          v-for="(step, index) in steps"
-          :key="step.number"
-          :number="step.number"
-          :title="step.title"
-          :description="step.description"
-          :is-last="step.isLast"
-          data-aos="fade-up"
-          :data-aos-delay="index * 150"
-        />
-      </div>
-    </div>
+    <ol class="bar" data-ui>
+      <li
+        v-for="(s, i) in stages"
+        :key="s.time"
+        class="seg"
+        :style="{ flexGrow: s.grow, '--c': s.color, '--k': s.ink }"
+        v-reveal="i + 1"
+      >
+        <span class="block"><span class="time">{{ s.time }}</span></span>
+        <span class="clause">{{ s.text }}</span>
+      </li>
+    </ol>
   </section>
 </template>
+
+<style scoped>
+.process {
+  padding-block: var(--section);
+  background: var(--blue);
+}
+.title {
+  font-size: var(--step-display);
+  margin: 0 0 64px;
+  max-width: 14ch;
+}
+.bar {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 6px;
+}
+.seg {
+  flex-basis: 0;
+  min-width: 12%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.block {
+  height: 22vh;
+  min-height: 140px;
+  background: var(--c);
+  color: var(--k);
+  padding: 20px;
+  transform-origin: left;
+}
+.time { font: 400 var(--step-lead)/1.05 var(--display); display: block; max-width: 10ch; }
+.clause { max-width: 22ch; }
+
+@media (max-width: 860px) {
+  .title { margin-bottom: 40px; }
+  .bar { flex-direction: column; }
+  .seg { min-width: 0; }
+  .block { height: auto; min-height: 72px; display: flex; flex-direction: column; gap: 6px; padding: 16px; }
+  .seg:nth-child(2) .block { min-height: 200px; }
+  .seg:nth-child(3) .block { min-height: 120px; }
+  .clause { max-width: none; margin-bottom: 12px; }
+}
+</style>

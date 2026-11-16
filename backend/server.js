@@ -1,4 +1,4 @@
-require('dotenv').config(); // Carga las claves secretas
+require('dotenv').config();
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
@@ -7,85 +7,72 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = 3000;
 
-// Middleware global
-app.use(cors()); // CORS estándar para cuando estemos en producción
-app.use(express.json());
+// nginx sits in front: trust its X-Forwarded-For so the limiter sees real IPs
+app.set('trust proxy', 1);
+app.use(cors({ origin: ['https://syncrodigital.es', 'https://www.syncrodigital.es', 'http://localhost:5173'] }));
+app.use(express.json({ limit: '20kb' }));
 
-// Configuración del Limitador (DESACTIVADO PARA PRUEBAS)
-/*
+// 5 messages every 10 minutes per IP
 const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, 
-    max: 100, 
-    message: { error: 'Demasiadas peticiones. Inténtalo en un minuto.' },
-    standardHeaders: true, 
-    legacyHeaders: false,
+  windowMs: 10 * 60 * 1000,
+  limit: 5,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: 'Has enviado varios mensajes seguidos. Prueba de nuevo en unos minutos.' },
 });
-
 app.use('/api/enviar', limiter);
-*/
 
-// Configuración de DonDominio (SMTP)
+// SMTP de DonDominio
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST, 
-    port: 587, 
-    secure: false, 
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-    }
+  host: process.env.SMTP_HOST,
+  port: 587,
+  secure: false,
+  auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
 });
 
-// Verificamos la conexión al arrancar
-transporter.verify((error, success) => {
-    if (error) {
-        console.error('❌ Error conectando al servidor de correo:', error);
-    } else {
-        console.log('✅ Servidor de correo listo para enviar mensajes');
-    }
+transporter.verify((error) => {
+  if (error) console.error('SMTP no disponible:', error.message);
+  else console.log('SMTP listo');
 });
 
-// Ruta API
+const escapeHtml = (s) =>
+  String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const oneLine = (s) => String(s).replace(/[\r\n]+/g, ' ').trim();
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 app.post('/api/enviar', async (req, res) => {
-    const { name, email, message } = req.body;
+  const { name, email, message, website } = req.body || {};
 
-    if (!name || !email || !message) {
-        return res.status(400).json({ error: 'Faltan datos' });
-    }
+  // honeypot: a person never fills this field; pretend it went fine
+  if (website) return res.status(200).json({ ok: true });
 
-    try {
-        const info = await transporter.sendMail({
-            from: `"${name}" <${process.env.SMTP_USER}>`, // OJO: El remitente debe ser TU correo para evitar bloqueos de spam
-            replyTo: email, // Si le das a "responder", responderás al cliente
-            to: process.env.SMTP_USER, // Te lo envías a ti mismo
-            subject: `🚀 Nuevo contacto web: ${name}`,
-            text: `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`,
-            html: `
-                <h3>Nuevo mensaje desde la web</h3>
-                <p><strong>Nombre:</strong> ${name}</p>
-                <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-                <hr>
-                <p>${message.replace(/\n/g, '<br>')}</p>
-            `
-        });
+  if (typeof name !== 'string' || typeof email !== 'string' || typeof message !== 'string') {
+    return res.status(400).json({ error: 'Faltan datos.' });
+  }
+  const n = oneLine(name).slice(0, 100);
+  const e = oneLine(email).slice(0, 200);
+  const m = message.trim().slice(0, 5000);
+  if (!n || !m) return res.status(400).json({ error: 'Falta el nombre o el mensaje.' });
+  if (!EMAIL.test(e)) return res.status(400).json({ error: 'El email no parece correcto.' });
 
-        console.log('📩 Email enviado:', info.messageId);
-        res.status(200).json({ message: 'Email enviado correctamente' });
-
-    } catch (error) {
-        console.error('❌ Error detallado enviando email:', {
-            message: error.message,
-            code: error.code,
-            command: error.command,
-            response: error.response
-        });
-        res.status(500).json({ 
-            error: 'No se pudo enviar el email',
-            details: error.message 
-        });
-    }
+  try {
+    await transporter.sendMail({
+      from: `"Web Syncro Digital" <${process.env.SMTP_USER}>`,
+      replyTo: { name: n, address: e },
+      to: process.env.SMTP_USER,
+      subject: `Nuevo contacto web: ${n}`,
+      text: `Nombre: ${n}\nEmail: ${e}\n\n${m}`,
+      html: `<h3>Nuevo mensaje desde la web</h3>
+        <p><strong>Nombre:</strong> ${escapeHtml(n)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(e)}</p>
+        <hr>
+        <p>${escapeHtml(m).replace(/\n/g, '<br>')}</p>`,
+    });
+    res.status(200).json({ ok: true });
+  } catch (err) {
+    console.error('Error enviando email:', { message: err.message, code: err.code, response: err.response });
+    res.status(500).json({ error: 'No se ha podido enviar el mensaje.' });
+  }
 });
 
-// Arrancar servidor
-app.listen(PORT, () => {
-    console.log(`🚀 Backend corriendo en http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Backend en http://localhost:${PORT}`));

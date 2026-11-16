@@ -1,139 +1,136 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Send } from 'lucide-vue-next'
+import { ref, watch } from 'vue'
+import { ui } from '../store'
 
 const name = ref('')
 const email = ref('')
 const message = ref('')
+const website = ref('') // honeypot: people never see it, bots fill it
+const state = ref<'idle' | 'sending' | 'sent' | 'error'>('idle')
+const feedback = ref('')
 
-const formState = ref('idle') // idle | loading | success | error
-const formMessage = ref('')
+const starters = {
+  web: 'Hola, quiero una web para mi negocio. Es…',
+  software: 'Hola, tengo una idea de software a medida: …',
+}
 
-const handleSubmit = async () => {
-  formState.value = 'loading'
-  formMessage.value = ''
-
-  try {
-    const response = await fetch('/api/enviar', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: name.value,
-        email: email.value,
-        message: message.value,
-      }),
-    })
-
-    if (!response.ok) {
-      let errorMessage = 'Error en el servidor'
-      try {
-        const errorData = await response.json()
-        errorMessage = errorData.details || errorMessage
-      } catch {
-        // Response body is empty or not valid JSON
-      }
-      throw new Error(errorMessage)
+watch(
+  () => ui.plan,
+  (plan) => {
+    if (plan && (!message.value || Object.values(starters).includes(message.value))) {
+      message.value = starters[plan]
     }
+  },
+)
 
-    formState.value = 'success'
-    formMessage.value = '¡Sincronización iniciada! Nos pondremos en contacto pronto.'
+async function send() {
+  state.value = 'sending'
+  feedback.value = ''
+  try {
+    const res = await fetch('/api/enviar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name.value, email: email.value, message: message.value, website: website.value }),
+    })
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      throw new Error(data.error || 'No se ha podido enviar.')
+    }
+    state.value = 'sent'
+    feedback.value = 'Recibido. Te contesto al email que me has dejado.'
     name.value = ''
     email.value = ''
     message.value = ''
-
-  } catch (error: any) {
-    console.error(error)
-    formState.value = 'error'
-    formMessage.value = error.message || 'Error al enviar. Por favor, inténtalo de nuevo.'
+  } catch (e) {
+    state.value = 'error'
+    feedback.value = `${(e as Error).message} Si sigue fallando, escríbeme a info@syncrodigital.es.`
   }
 }
 </script>
 
 <template>
-  <section id="contacto" class="py-24 md:py-32 bg-white dark:bg-[#020617] relative overflow-hidden transition-colors duration-500">
-    <!-- Background accents -->
-    <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-primary/5 dark:bg-primary/10 rounded-full blur-[140px] pointer-events-none transition-colors duration-500"></div>
-
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="bg-slate-50 dark:bg-white/5 backdrop-blur-3xl border border-black/5 dark:border-white/10 p-10 md:p-20 relative overflow-hidden transition-all duration-500">
-        
-        <!-- Subtle line decoration -->
-        <div class="absolute top-0 right-0 w-32 h-32 border-t-2 border-r-2 border-primary/20 transition-all duration-700"></div>
-
-        <div class="grid lg:grid-cols-2 gap-20 items-start">
-            
-            <div data-aos="fade-right">
-                <div class="flex items-center gap-3 mb-8">
-                  <div class="h-[1px] w-12 bg-primary"></div>
-                  <span class="text-xs font-bold tracking-[0.3em] uppercase text-primary dark:text-primary-light transition-colors duration-500">Contacto Directo</span>
-                </div>
-                <h2 class="text-5xl md:text-7xl font-black text-black dark:text-white tracking-tighter leading-none mb-10 transition-colors duration-500">
-                    ¿Hablamos de tu <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-800 to-primary dark:from-primary dark:via-white dark:to-primary">proyecto?</span>
-                </h2>
-                <div class="space-y-8 text-lg text-slate-600 dark:text-slate-400 font-light transition-colors duration-500">
-                    <p>Cuéntanos dónde está tu 'ruido' y te diremos cómo podemos sincronizarlo hacia el éxito.</p>
-                    <div class="space-y-4 pt-4">
-                        <div class="flex items-center gap-4 text-black dark:text-white font-bold transition-colors duration-500">
-                            <span class="w-10 h-[1px] bg-primary/40"></span>
-                            info@syncrodigital.es
-                        </div>
-                        <div class="flex items-center gap-4 text-black dark:text-white font-bold transition-colors duration-500">
-                            <span class="w-10 h-[1px] bg-primary/40"></span>
-                            Barcelona, España
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div data-aos="fade-left" data-aos-delay="200" class="relative">
-                <form @submit.prevent="handleSubmit" class="space-y-8">
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-bold tracking-widest uppercase text-slate-500 dark:text-slate-500 ml-1 transition-colors duration-500">Nombre Completo</label>
-                        <input type="text" required v-model="name" :disabled="formState === 'loading'"
-                               class="w-full bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 px-6 py-4 text-black dark:text-white focus:outline-none focus:border-primary transition-all duration-300 placeholder:text-slate-400 dark:placeholder:text-slate-600"
-                               placeholder="Tu nombre">
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-bold tracking-widest uppercase text-slate-500 dark:text-slate-500 ml-1 transition-colors duration-500">Email Profesional</label>
-                        <input type="email" required v-model="email" :disabled="formState === 'loading'"
-                               class="w-full bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 px-6 py-4 text-black dark:text-white focus:outline-none focus:border-primary transition-all duration-300 placeholder:text-slate-400 dark:placeholder:text-slate-600"
-                               placeholder="email@tuempresa.com">
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-bold tracking-widest uppercase text-slate-500 dark:text-slate-500 ml-1 transition-colors duration-500">Desafío del Proyecto</label>
-                        <textarea rows="4" required v-model="message" :disabled="formState === 'loading'"
-                                  class="w-full bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 px-6 py-4 text-black dark:text-white focus:outline-none focus:border-primary transition-all duration-300 placeholder:text-slate-400 dark:placeholder:text-slate-600 resize-none"
-                                  placeholder="¿Qué necesitas sincronizar?"></textarea>
-                    </div>
-
-                    <div>
-                        <button type="submit" :disabled="formState === 'loading'"
-                                class="w-full group flex items-center justify-center gap-4 px-10 py-6 bg-black dark:bg-white text-white dark:text-black font-black tracking-widest uppercase text-sm transition-all duration-500 hover:bg-primary dark:hover:bg-primary hover:text-white dark:hover:text-white disabled:opacity-50">
-                            <span v-if="formState === 'loading'">Procesando...</span>
-                            <span v-else class="flex items-center gap-3">
-                                Enviar Mensaje
-                                <Send class="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                            </span>
-                        </button>
-                    </div>
-
-                    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0 translateY-4">
-                      <div v-if="formState === 'success'" class="p-6 bg-primary/10 border border-primary/20 text-primary dark:text-primary-light font-bold text-center">
-                          {{ formMessage }}
-                      </div>
-                    </Transition>
-                    
-                    <div v-if="formState === 'error'" class="p-6 bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-500 font-bold text-center">
-                        {{ formMessage }}
-                    </div>
-                </form>
-            </div>
-        </div>
-      </div>
+  <section id="contacto" class="contact wrap" aria-labelledby="contacto-title">
+    <div class="say">
+      <h2 id="contacto-title" class="head" v-reveal>Pide tu presupuesto</h2>
+      <p class="lead statement" v-reveal="1">
+        Cuéntame qué negocio tienes y qué necesitas. Te respondo con un precio cerrado.
+      </p>
+      <ul class="direct" v-reveal="2">
+        <li><a href="mailto:info@syncrodigital.es" class="link">info@syncrodigital.es</a></li>
+        <li><a href="https://www.instagram.com/syncrodigital_" target="_blank" rel="noopener" class="link">Instagram</a></li>
+        <li class="small place">Sabadell · Catalunya y Andorra</li>
+      </ul>
     </div>
+
+    <form class="form" novalidate @submit.prevent="send" v-reveal="1">
+      <div class="field">
+        <label for="c-name">Nombre</label>
+        <input id="c-name" v-model="name" type="text" name="name" autocomplete="name" required maxlength="100" :disabled="state === 'sending'" />
+      </div>
+      <div class="field">
+        <label for="c-email">Email</label>
+        <input id="c-email" v-model="email" type="email" name="email" autocomplete="email" required maxlength="200" :disabled="state === 'sending'" />
+      </div>
+      <div class="field">
+        <label for="c-msg">Qué necesitas</label>
+        <textarea id="c-msg" v-model="message" name="message" rows="5" required maxlength="5000" :disabled="state === 'sending'"></textarea>
+      </div>
+      <div class="hp" aria-hidden="true">
+        <label for="c-web">No rellenar</label>
+        <input id="c-web" v-model="website" type="text" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+      <button type="submit" class="btn btn-yellow" :disabled="state === 'sending' || !name || !email || !message">
+        {{ state === 'sending' ? 'Enviando…' : 'Enviar' }} <span class="arrow" aria-hidden="true">→</span>
+      </button>
+      <p class="small legal">
+        Uso tus datos solo para contestarte.
+        <a href="#" class="link" @click.prevent="ui.legalTab = 'privacy'; ui.legalOpen = true">Privacidad</a>
+      </p>
+      <p v-if="feedback" class="feedback" :class="state" role="status" aria-live="polite">{{ feedback }}</p>
+    </form>
   </section>
 </template>
+
+<style scoped>
+.contact {
+  display: grid;
+  grid-template-columns: 5fr 1fr 6fr;
+  padding-top: var(--section);
+  padding-bottom: clamp(96px, 10vw, 160px);
+  background: var(--blue);
+}
+.say { grid-column: 1; }
+.statement { max-width: 30ch; margin: 24px 0 40px; }
+.direct { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.place { color: var(--muted); margin-top: 6px; }
+
+.form { grid-column: 3; display: grid; gap: 20px; align-content: start; }
+.field { display: grid; gap: 8px; }
+.field label { font-size: var(--step-small); font-weight: 500; }
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--blue-2);
+  color: var(--paper);
+  border: 2px solid transparent;
+  border-radius: 0;
+  font: inherit;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+.field textarea { resize: vertical; min-height: 140px; }
+.field input:hover, .field textarea:hover { border-color: var(--muted); }
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--yellow); background: var(--black); }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; } /* taste-skill-ignore: honeypot, never visible */
+.form .btn { justify-self: start; }
+.legal { color: var(--muted); margin: 0; }
+.feedback { margin: 0; padding: 14px 16px; font-weight: 500; }
+.feedback.sent { background: var(--yellow); color: var(--black); }
+.feedback.error { background: var(--pink); color: var(--black); }
+
+@media (max-width: 860px) {
+  .contact { grid-template-columns: 1fr; gap: 48px; }
+  .form { grid-column: 1; }
+  .form .btn { width: 100%; }
+}
+</style>

@@ -1,132 +1,125 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { X } from 'lucide-vue-next'
+import { ref, watch, nextTick } from 'vue'
+import { ui } from '../store'
 
-const props = defineProps<{
-  isOpen: boolean
-  initialTab?: 'privacy' | 'legal'
-}>()
+const tabs = [
+  { id: 'legal', label: 'Aviso legal' },
+  { id: 'privacy', label: 'Privacidad' },
+  { id: 'cookies', label: 'Cookies' },
+] as const
 
-const emit = defineEmits(['close'])
+const dialog = ref<HTMLDivElement | null>(null)
+let lastFocus: Element | null = null
 
-const activeTab = ref(props.initialTab || 'privacy')
+watch(
+  () => ui.legalOpen,
+  async (open) => {
+    if (open) {
+      lastFocus = document.activeElement
+      document.body.style.overflow = 'hidden'
+      await nextTick()
+      dialog.value?.focus()
+    } else {
+      document.body.style.overflow = ''
+      ;(lastFocus as HTMLElement | null)?.focus?.()
+    }
+  },
+)
 
-watch(() => props.initialTab, (newVal) => {
-  if (newVal) activeTab.value = newVal
-})
-
-const setTab = (tab: 'privacy' | 'legal') => {
-  activeTab.value = tab
+function close() {
+  ui.legalOpen = false
 }
 </script>
 
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-    <!-- Backdrop -->
-    <div class="absolute inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-xl transition-opacity" @click="$emit('close')"></div>
-
-    <div class="relative w-full max-w-4xl bg-white dark:bg-[#020617] border border-black/5 dark:border-white/10 shadow-2xl flex flex-col max-h-[85vh] overflow-hidden animate-fade-in-up transition-colors duration-500">
-      
-      <!-- Header -->
-      <div class="flex items-center justify-between px-8 py-6 border-b border-black/5 dark:border-white/10 bg-slate-50 dark:bg-white/5 backdrop-blur-md transition-colors duration-500">
-        <div class="flex gap-1 md:gap-4">
-          <button 
-            @click="setTab('privacy')"
-            class="px-5 py-3 text-[10px] font-black tracking-widest uppercase transition-all"
-            :class="activeTab === 'privacy' ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg' : 'text-slate-500 hover:text-black dark:hover:text-white'"
-          >
-            Privacidad
-          </button>
-          <button 
-            @click="setTab('legal')"
-            class="px-5 py-3 text-[10px] font-black tracking-widest uppercase transition-all"
-            :class="activeTab === 'legal' ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg' : 'text-slate-500 hover:text-black dark:hover:text-white'"
-          >
-            Aviso Legal
-          </button>
+  <div v-if="ui.legalOpen" class="overlay" @click.self="close" @keydown.esc="close">
+    <div ref="dialog" class="dialog" role="dialog" aria-modal="true" aria-labelledby="legal-title" tabindex="-1">
+      <div class="top">
+        <div class="tabs" role="tablist">
+          <button
+            v-for="t in tabs"
+            :key="t.id"
+            type="button"
+            role="tab"
+            :aria-selected="ui.legalTab === t.id"
+            class="tab"
+            @click="ui.legalTab = t.id"
+          >{{ t.label }}</button>
         </div>
-        
-        <button @click="$emit('close')" class="p-2 text-slate-500 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all">
-          <X class="w-6 h-6" />
-        </button>
+        <button type="button" class="close" @click="close">Cerrar</button>
       </div>
 
-      <!-- Content -->
-      <div class="p-8 md:p-12 overflow-y-auto text-slate-600 dark:text-slate-400 text-sm leading-relaxed space-y-8 scrollbar-hide transition-colors duration-500">
-        
-        <div v-if="activeTab === 'privacy'" class="space-y-8 animate-fade-in">
-          <h2 class="text-3xl font-black text-black dark:text-white tracking-tighter transition-colors duration-500">Política de Privacidad</h2>
-          <p class="text-lg font-light italic">En <span class="text-primary font-bold">Syncro Digital</span>, tu privacidad es el núcleo de nuestra integridad técnica. Cumplimos estrictamente con el RGPD.</p>
-          
-          <div class="space-y-6">
-            <section class="space-y-2">
-              <h3 class="text-xs font-black tracking-[0.2em] uppercase text-black dark:text-white transition-colors duration-500">1. Responsable del Tratamiento</h3>
-              <div class="pl-4 border-l border-primary/30 py-1 space-y-1">
-                <p><span class="text-black dark:text-white font-bold">Titular:</span> Pau Monedero Roigé</p>
-                <p><span class="text-black dark:text-white font-bold">NIF:</span> 49724453V</p>
-                <p><span class="text-black dark:text-white font-bold">Email:</span> info@syncrodigital.es</p>
-              </div>
-            </section>
+      <div class="body">
+        <template v-if="ui.legalTab === 'legal'">
+          <h2 id="legal-title" class="head">Aviso legal</h2>
+          <p>En cumplimiento del artículo 10 de la Ley 34/2002 (LSSI-CE), estos son los datos del titular de syncrodigital.es:</p>
+          <p><strong>Titular:</strong> Pau Monedero Roigé (Syncro Digital)<br><strong>NIF:</strong> 49724453V<br><strong>Domicilio:</strong> Sabadell, Barcelona<br><strong>Email:</strong> info@syncrodigital.es</p>
+          <h3>Propiedad intelectual</h3>
+          <p>El diseño, los textos y el código de esta web son de Syncro Digital. Las capturas de los trabajos muestran webs hechas para sus clientes y se enseñan con fines de portfolio. La foto de Sabadell es de Xavigivax y se usa con licencia CC BY-SA 3.0.</p>
+        </template>
 
-            <section class="space-y-2">
-              <h3 class="text-xs font-black tracking-[0.2em] uppercase text-black dark:text-white transition-colors duration-500">2. Finalidad y Sincronización</h3>
-              <p class="font-light">Gestionamos tus datos exclusivamente para responder a tus desafíos tecnológicos planteados en el formulario y asegurar una comunicación fluida. No comerciamos con tu información.</p>
-            </section>
+        <template v-else-if="ui.legalTab === 'privacy'">
+          <h2 id="legal-title" class="head">Privacidad</h2>
+          <h3>Quién trata tus datos</h3>
+          <p>Pau Monedero Roigé (Syncro Digital), NIF 49724453V, info@syncrodigital.es.</p>
+          <h3>Qué datos y para qué</h3>
+          <p>El nombre, el email y el mensaje que envías con el formulario de contacto, solo para contestarte y, si llegamos a trabajar juntos, para preparar el presupuesto. La base legal es tu consentimiento al enviar el formulario.</p>
+          <h3>Cuánto tiempo</h3>
+          <p>Mientras dure la conversación o la relación comercial, y después el tiempo que exija la ley.</p>
+          <h3>Con quién se comparten</h3>
+          <p>Con nadie. El mensaje llega a mi buzón de correo, alojado en DonDominio (España).</p>
+          <h3>Tus derechos</h3>
+          <p>Puedes pedir acceso, rectificación, supresión, oposición, limitación o portabilidad escribiendo a info@syncrodigital.es. Si crees que no se respetan, puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).</p>
+        </template>
 
-            <section class="space-y-2">
-              <h3 class="text-xs font-black tracking-[0.2em] uppercase text-black dark:text-white transition-colors duration-500">3. Derechos Digitales</h3>
-              <p class="font-light">Tienes pleno control sobre tus datos. Acceso, rectificación, portabilidad y olvido. Envíanos un email y sincronizaremos tu solicitud al instante.</p>
-            </section>
-          </div>
-        </div>
-
-        <div v-if="activeTab === 'legal'" class="space-y-8 animate-fade-in">
-          <h2 class="text-3xl font-black text-black dark:text-white tracking-tighter transition-colors duration-500">Aviso Legal</h2>
-          <p class="text-lg font-light">Transparencia absoluta cumpliendo con el artículo 10 de la Ley 34/2002 LSSICE.</p>
-
-          <div class="space-y-6">
-            <section class="space-y-2">
-              <h3 class="text-xs font-black tracking-[0.2em] uppercase text-black dark:text-white transition-colors duration-500">1. Titularidad del Ecosistema</h3>
-              <div class="pl-4 border-l border-primary/30 py-1 space-y-1">
-                <p><span class="text-black dark:text-white font-bold">Syncro Digital</span></p>
-                <p>NIF 49724453V</p>
-                <p>Sabadell, Barcelona</p>
-              </div>
-            </section>
-
-            <section class="space-y-2">
-              <h3 class="text-xs font-black tracking-[0.2em] uppercase text-black dark:text-white transition-colors duration-500">2. Propiedad Intelectual</h3>
-              <p class="font-light">Todo el código fonte, arquitectura visual y activos digitales de syncrodigital.es están protegidos bajo leyes de propiedad intelectual internacionales.</p>
-            </section>
-          </div>
-        </div>
-
+        <template v-else>
+          <h2 id="legal-title" class="head">Cookies</h2>
+          <p>Esta web solo usa cookies de análisis si las aceptas. Si las rechazas, no se carga nada de Google.</p>
+          <h3>Qué cookies</h3>
+          <p><strong>Google Analytics</strong> (a través de Google Tag Manager): cookies <code>_ga</code> y <code>_ga_*</code>, que duran hasta dos años, para contar visitas y ver qué páginas se leen. Las gestiona Google Ireland Ltd.</p>
+          <p><strong>Tu elección</strong> se guarda en el almacenamiento del navegador (<code>cookie-consent</code>), sin caducidad, para no volver a preguntarte.</p>
+          <p>Puedes cambiar de opinión cuando quieras con «Cambiar mis cookies», al pie de la página.</p>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.animate-fade-in-up {
-  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--m);
+  background: rgb(0 0 0 / 0.6);
 }
-.animate-fade-in {
-  animation: fadeIn 0.8s ease-out;
+.dialog {
+  width: min(760px, 100%);
+  max-height: 85svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  color: var(--black);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 0.4); /* taste-skill-ignore: dialog */
+  outline: none;
 }
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(40px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+.top { display: flex; justify-content: space-between; align-items: stretch; background: var(--yellow); }
+.tabs { display: flex; flex-wrap: wrap; }
+.tab, .close {
+  padding: 16px 20px;
+  background: none;
+  border: 0;
+  font: 500 var(--step-small)/1 var(--text);
+  cursor: pointer;
+  color: var(--black);
 }
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+.tab[aria-selected='true'] { background: var(--black); color: var(--paper); }
+.tab:hover:not([aria-selected='true']), .close:hover { background: var(--paper); }
+.body { padding: 32px clamp(20px, 4vw, 48px) 40px; overflow-y: auto; line-height: 1.6; }
+.body .head { margin-bottom: 20px; }
+.body h3 { font: 500 var(--step-body)/1.3 var(--text); margin: 24px 0 6px; }
+.body p { margin: 0 0 12px; max-width: 62ch; }
+code { font-size: 0.9em; background: var(--yellow); padding: 0 4px; }
 </style>

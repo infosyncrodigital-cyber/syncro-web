@@ -1,112 +1,124 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import ThemeToggle from './ThemeToggle.vue'
+import { ref } from 'vue'
 
-const isMobileMenuOpen = ref(false)
-const isScrolled = ref(false)
-
-const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
-
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
-}
-
-const closeMobileMenu = () => {
-  isMobileMenuOpen.value = false
-}
+const open = ref(false)
+const links = [
+  { href: '#trabajos', label: 'Trabajos' },
+  { href: '#precios', label: 'Precios' },
+  { href: '#como-trabajo', label: 'Cómo trabajo' },
+]
 </script>
 
 <template>
-  <header 
-    :class="[
-      'fixed top-0 z-50 w-full transition-all duration-500 border-b',
-      isScrolled 
-        ? 'bg-white/90 dark:bg-[#020617]/90 backdrop-blur-md border-black/5 dark:border-white/10 py-2 shadow-sm' 
-        : 'bg-transparent border-transparent py-4'
-    ]"
-  >
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between items-center h-16">
-              
-              <a 
-                class="text-2xl font-black tracking-tighter transition-colors duration-500"
-                :class="isScrolled ? 'text-black dark:text-white' : 'text-black dark:text-white'"
-                href="#" 
-                @click="closeMobileMenu"
-              >
-                  SYNCRO <span class="text-primary">DIGITAL.</span>
-              </a>
-              
-              <nav class="hidden md:flex space-x-8 items-center">
-                  <a href="#servicios" 
-                    class="text-xs font-bold tracking-widest uppercase transition-colors duration-500"
-                    :class="isScrolled ? 'text-black/60 dark:text-white/70 hover:text-primary' : 'text-black/60 dark:text-white/70 hover:text-primary dark:hover:text-white'"
-                  >Servicios</a>
-                  <a href="#proceso" 
-                    class="text-xs font-bold tracking-widest uppercase transition-colors duration-500"
-                    :class="isScrolled ? 'text-black/60 dark:text-white/70 hover:text-primary' : 'text-black/60 dark:text-white/70 hover:text-primary dark:hover:text-white'"
-                  >Proceso</a>
-                  <a href="#portfolio" 
-                    class="text-xs font-bold tracking-widest uppercase transition-colors duration-500"
-                    :class="isScrolled ? 'text-black/60 dark:text-white/70 hover:text-primary' : 'text-black/60 dark:text-white/70 hover:text-primary dark:hover:text-white'"
-                  >Portfolio</a>
-                  <a href="#contacto" 
-                    class="text-xs font-bold tracking-widest uppercase transition-colors duration-500"
-                    :class="isScrolled ? 'text-black/60 dark:text-white/70 hover:text-primary' : 'text-black/60 dark:text-white/70 hover:text-primary dark:hover:text-white'"
-                  >Contacto</a>
-                  
-                  <div class="h-6 w-px bg-black/10 dark:bg-white/10 mx-2"></div>
-                  
-                  <ThemeToggle />
+  <header class="bar">
+    <a href="#inicio" class="mark" @click="open = false">Syncro Digital</a>
 
-                  <a href="#contacto" class="px-8 py-3 text-[10px] font-black tracking-widest uppercase text-white bg-primary hover:bg-primary-dark transition-all">
-                      Empezar
-                  </a>
-              </nav>
+    <nav class="tab" aria-label="Principal">
+      <a v-for="l in links" :key="l.href" :href="l.href">{{ l.label }}</a>
+    </nav>
 
-              <div class="md:hidden flex items-center gap-4">
-                  <ThemeToggle />
-                  <button @click="toggleMobileMenu" class="p-2 transition-colors duration-500" :class="isScrolled ? 'text-black dark:text-white' : 'text-black dark:text-white'" aria-label="Abrir menú">
-                    <svg v-if="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
-                    </svg>
-                    <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-              </div>
-          </div>
-      </div>
+    <a href="#contacto" class="btn btn-yellow cta">Pedir presupuesto</a>
 
-      <Transition
-        enter-active-class="transition duration-300 ease-out"
-        enter-from-class="transform -translate-y-4 opacity-0"
-        enter-to-class="transform translate-y-0 opacity-100"
-        leave-active-class="transition duration-200 ease-in"
-        leave-from-class="transform translate-y-0 opacity-100"
-        leave-to-class="transform -translate-y-4 opacity-0"
-      >
-        <div v-if="isMobileMenuOpen" class="md:hidden absolute top-full left-0 w-full bg-white dark:bg-[#020617] border-b border-black/10 dark:border-white/10 shadow-2xl py-8 z-40">
-            <nav class="flex flex-col space-y-6 px-6">
-                <a href="#servicios" @click="closeMobileMenu" class="text-xl font-black tracking-tight text-black/70 dark:text-white/70 hover:text-primary">Servicios</a>
-                <a href="#proceso" @click="closeMobileMenu" class="text-xl font-black tracking-tight text-black/70 dark:text-white/70 hover:text-primary">Proceso</a>
-                <a href="#portfolio" @click="closeMobileMenu" class="text-xl font-black tracking-tight text-black/70 dark:text-white/70 hover:text-primary">Portfolio</a>
-                <a href="#contacto" @click="closeMobileMenu" class="text-xl font-black tracking-tight text-black/70 dark:text-white/70 hover:text-primary">Contacto</a>
-                <a href="#contacto" @click="closeMobileMenu" class="mt-4 px-8 py-5 text-center text-xs font-black tracking-widest uppercase text-white bg-primary">
-                    Iniciar Proyecto
-                </a>
-            </nav>
-        </div>
-      </Transition>
+    <button
+      class="menu"
+      type="button"
+      :aria-expanded="open"
+      aria-controls="menu-movil"
+      @click="open = !open"
+    >{{ open ? 'Cerrar' : 'Menú' }}</button>
+
+    <nav v-show="open" id="menu-movil" class="sheet" aria-label="Menú">
+      <a v-for="l in links" :key="l.href" :href="l.href" @click="open = false">{{ l.label }}</a>
+      <a href="#contacto" class="btn btn-yellow" @click="open = false">Pedir presupuesto</a>
+    </nav>
   </header>
 </template>
+
+<style scoped>
+.bar {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 20;
+  display: flex;
+  align-items: stretch;
+  height: 56px;
+}
+.mark {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--m) 24px;
+  background: var(--black);
+  color: var(--paper);
+  font: 500 var(--step-body)/1 var(--text);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tab {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 32px);
+  width: calc(42% - 1px);
+  padding-inline: 24px;
+  background: var(--yellow);
+  color: var(--black);
+}
+.tab a {
+  color: inherit;
+  text-decoration: none;
+  font-size: var(--step-small);
+  font-weight: 500;
+  white-space: nowrap;
+  position: relative;
+  padding-block: 4px;
+}
+.tab a::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s var(--ease-out);
+}
+.tab a:hover::after { transform: scaleX(1); }
+.cta {
+  margin-left: auto;
+  min-height: 56px;
+  margin-right: 0;
+}
+.menu, .sheet { display: none; }
+
+@media (max-width: 860px) {
+  .tab, .cta { display: none; }
+  .menu {
+    display: block;
+    margin-left: auto;
+    padding-inline: var(--m);
+    background: var(--yellow);
+    color: var(--black);
+    font: 500 var(--step-body)/1 var(--text);
+    border: 0;
+    cursor: pointer;
+  }
+  .sheet {
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px var(--m) 32px;
+    background: var(--black);
+    box-shadow: 0 24px 48px rgb(0 0 0 / 0.35); /* taste-skill-ignore: open menu floats */
+  }
+  .sheet[style*='display: none'] { display: none; }
+  .sheet:not([style*='display: none']) { display: flex; }
+  .sheet a:not(.btn) {
+    color: var(--paper);
+    font: 400 var(--step-head)/1.05 var(--display);
+    text-decoration: none;
+  }
+}
+</style>

@@ -1,98 +1,72 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Plus, Minus } from 'lucide-vue-next'
-
 const faqs = [
   {
-    question: '¿Qué diferencia a Syncro Digital de una agencia tradicional?',
-    answer: 'No somos solo diseñadores o programadores; somos socios estratégicos. Nos enfocamos en la "Sincronización Total": unimos tu web, tus redes y tus procesos internos para que todo fluya hacia el mismo objetivo (vender más y trabajar menos).'
+    q: '¿Qué incluye la web de 600 €?',
+    a: 'Diseño a medida con tus textos y fotos, versión para móvil, formulario de contacto, mapa y horarios, aviso legal y de cookies, SEO técnico y alta en Google Search Console. También reviso y completo tu ficha de Google Business. El dominio se paga aparte, a precio de coste.',
   },
   {
-    question: '¿Cuánto tiempo tarda un proyecto de página web?',
-    answer: 'Depende de la complejidad. Una Landing Page de alta conversión puede estar lista en 2 semanas. Un ecosistema completo (Web + Automatizaciones + Branding) suele tomar entre 4 y 8 semanas. Siempre definimos un cronograma claro antes de empezar.'
+    q: '¿Y si luego quiero cambiar algo?',
+    a: 'El mantenimiento incluye hasta seis cambios de contenido al año: precios, horarios, servicios, textos o fotos. Me lo pides por email y lo cambio yo. Las secciones nuevas o las funciones nuevas, como reservas online, se presupuestan aparte.',
   },
   {
-    question: '¿Qué tecnologías utilizáis?',
-    answer: 'Apostamos por el rendimiento y la escalabilidad. Usamos Vue.js y Vite para webs ultrarrápidas, Tailwind CSS para diseños a medida y Supabase para bases de datos robustas. Para automatizaciones, integramos herramientas como Make, n8n o Zapier.'
+    q: '¿Cuánto se tarda?',
+    a: 'Unas tres semanas desde que tengo tus textos y tus fotos. Lo que más alarga una web es esperar el material, así que te digo desde el primer día qué necesito.',
   },
   {
-    question: '¿Ofrecéis mantenimiento después del lanzamiento?',
-    answer: 'Sí, absolutamente. No te dejamos solo. Ofrecemos planes de "Sincronización Continua" que incluyen actualizaciones, copias de seguridad, mejoras de seguridad y soporte prioritario para que tu negocio nunca se detenga.'
-  }
+    q: '¿Y si no tengo fotos buenas?',
+    a: 'Las fotos son lo que más se nota. Si no tienes, te aconsejo cómo hacerlas con el móvil o te recomiendo a un fotógrafo. Lo que no hago es rellenar tu web con fotos de banco que no son tuyas.',
+  },
+  {
+    q: '¿Para qué sirve la ficha de Google?',
+    a: 'Es lo primero que aparece cuando alguien busca tu negocio o «peluquería cerca de mí»: el mapa, el horario, las reseñas y el botón de llamar. La dejo verificada, con las categorías bien puestas y enlazada a tu web.',
+  },
+  {
+    q: '¿Trabajas fuera de Sabadell?',
+    a: 'Sí. La mayoría de lo que hago es a distancia, y ya tengo clientes en Andorra y en Barcelona. Si hace falta vernos, nos vemos.',
+  },
 ]
-
-const openIndex = ref<number | null>(0)
-
-const toggle = (index: number) => {
-  openIndex.value = openIndex.value === index ? null : index
-}
 </script>
 
 <template>
-  <section id="faq" class="py-24 md:py-32 bg-white dark:bg-[#020617] relative transition-colors duration-500">
-    <!-- Top accent line -->
-    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-black/5 dark:via-white/10 to-transparent transition-colors duration-500"></div>
-
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      
-      <div class="text-center mb-20">
-        <div data-aos="fade-down" class="flex items-center justify-center gap-3 mb-6 uppercase tracking-[0.3em] text-[10px] font-bold text-primary dark:text-primary-light transition-colors duration-500">
-          Claridad Total
-        </div>
-        <h2 data-aos="fade-up" class="text-4xl md:text-6xl font-black tracking-tighter text-black dark:text-white mb-6 leading-none transition-colors duration-500">
-          Preguntas <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-800 to-primary dark:from-primary dark:via-white dark:to-primary">Frecuentes.</span>
-        </h2>
-      </div>
-
-      <div class="space-y-4">
-        <div 
-          v-for="(faq, index) in faqs" 
-          :key="index"
-          class="border border-black/5 dark:border-white/10 overflow-hidden transition-all duration-500"
-          :class="openIndex === index ? 'bg-slate-50 dark:bg-white/5 shadow-2xl shadow-primary/5' : 'bg-transparent hover:border-primary/50'"
-        >
-          <button 
-            @click="toggle(index)"
-            class="w-full flex items-center justify-between p-8 text-left focus:outline-none group"
-          >
-            <span class="text-xl font-bold transition-colors duration-300" :class="openIndex === index ? 'text-primary dark:text-primary-light' : 'text-black dark:text-white'">
-              {{ faq.question }}
-            </span>
-            <div 
-              class="flex-shrink-0 ml-4 w-10 h-10 flex items-center justify-center transition-all duration-300"
-              :class="openIndex === index ? 'bg-primary text-white rotate-180' : 'bg-black/5 dark:bg-white/5 text-slate-400 dark:text-slate-500'"
-            >
-              <Minus v-if="openIndex === index" class="w-5 h-5" />
-              <Plus v-else class="w-5 h-5" />
-            </div>
-          </button>
-          
-          <div 
-            v-show="openIndex === index"
-            class="px-8 pb-8 text-slate-600 dark:text-slate-400 text-lg font-light leading-relaxed animate-fade-in-down transition-colors duration-500"
-          >
-            {{ faq.answer }}
-          </div>
-        </div>
-      </div>
-
+  <section id="preguntas" class="faq wrap" aria-labelledby="faq-title">
+    <div class="row">
+      <h2 id="faq-title" class="q heading">Preguntas frecuentes</h2>
+      <span></span>
+    </div>
+    <div v-for="(f, i) in faqs" :key="f.q" class="row" v-reveal="i % 2">
+      <h3 class="q">{{ f.q }}</h3>
+      <p class="a">{{ f.a }}</p>
     </div>
   </section>
 </template>
 
 <style scoped>
-.animate-fade-in-down {
-  animation: fadeInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+.faq {
+  padding-block: var(--section);
+  background: var(--black);
+  color: var(--paper);
+  display: grid;
+  gap: clamp(56px, 6vw, 84px);
 }
+.row {
+  display: grid;
+  grid-template-columns: 6fr 1fr 5fr;
+  align-items: baseline;
+}
+.q {
+  grid-column: 1;
+  margin: 0;
+  font: 400 var(--step-head)/1.05 var(--display);
+  letter-spacing: -0.02em;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+.heading { color: var(--muted); }
+.a { grid-column: 3; margin: 0; max-width: 40ch; line-height: 1.55; }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@media (max-width: 860px) {
+  .row { grid-template-columns: 1fr; gap: 12px; }
+  .q { font-size: var(--step-lead); }
+  .a { grid-column: 1; }
 }
 </style>

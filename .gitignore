@@ -45,3 +45,5 @@ dist-ssr
 # Variables de entorno (¡SEGURIDAD!)
 .env
 backend/.env
+# Herramientas de diseño
+.taste-skill

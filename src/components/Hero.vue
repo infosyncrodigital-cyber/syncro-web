@@ -1,115 +1,149 @@
+<script setup lang="ts">
+// The masthead is a mosaic of real websites built by Syncro Digital.
+const tiles = [
+  { kind: 'img', src: '/trabajos/adriryan-d1.webp', alt: 'Portada de la web de Adri Ryan Salon, peluquería en Andorra', cls: 't-a' },
+  { kind: 'color', cls: 't-yellow' },
+  { kind: 'img', src: '/trabajos/arlegal-d1.webp', alt: 'Portada de la web de AR Legal, despacho jurídico en Andorra', cls: 't-b' },
+  { kind: 'color', cls: 't-black' },
+  { kind: 'img', src: '/trabajos/nudo-d1.webp', alt: 'Portada de la tienda online de Nudō', cls: 't-c' },
+  { kind: 'color', cls: 't-pink' },
+  { kind: 'img', src: '/trabajos/andrea-d2.webp', alt: 'Sección de trabajos del portfolio de Andrea Sáez Montero', cls: 't-d' },
+  { kind: 'color', cls: 't-surface' },
+  { kind: 'color', cls: 't-black2' },
+]
+</script>
+
 <template>
-  <section class="relative min-h-screen flex items-center justify-center bg-white dark:bg-[#020617] overflow-hidden text-black dark:text-white w-full max-w-full transition-colors duration-500">
-      
-      <!-- Kinetic Background Marquee -->
-      <div class="absolute inset-0 flex flex-col justify-around opacity-[0.03] dark:opacity-[0.03] select-none pointer-events-none z-0 overflow-hidden">
-        <div class="marquee-wrapper">
-          <div class="marquee-text whitespace-nowrap text-[8rem] sm:text-[12rem] md:text-[15rem] font-black leading-none uppercase text-black dark:text-white">
-            SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN · SYNCRO DIGITAL · ESTRATEGIA · INNOVACIÓN ·
-          </div>
-        </div>
-        <div class="marquee-wrapper">
-          <div class="marquee-text-reverse whitespace-nowrap text-[8rem] sm:text-[12rem] md:text-[15rem] font-black leading-none uppercase text-black dark:text-white">
-            AUTOMATIZACIÓN · CRECIMIENTO · ÉXITO · AUTOMATIZACIÓN · CRECIMIENTO · ÉXITO · AUTOMATIZACIÓN · CRECIMIENTO · ÉXITO · AUTOMATIZACIÓN · CRECIMIENTO · ÉXITO ·
-          </div>
-        </div>
-        <div class="marquee-wrapper">
-          <div class="marquee-text whitespace-nowrap text-[8rem] sm:text-[12rem] md:text-[15rem] font-black leading-none uppercase text-black dark:text-white">
-            SOFTWARE · SOLUCIONES · FUTURO · SOFTWARE · SOLUCIONES · FUTURO · SOFTWARE · SOLUCIONES · FUTURO · SOFTWARE · SOLUCIONES · FUTURO ·
-          </div>
+  <section id="inicio" class="hero" aria-labelledby="hero-title">
+    <div class="band">
+      <div
+        v-for="(t, i) in tiles"
+        :key="i"
+        class="tile"
+        :class="t.cls"
+      >
+        <img
+          v-if="t.kind === 'img'"
+          :src="t.src"
+          :alt="t.alt"
+          width="1200"
+          height="750"
+          :fetchpriority="i === 0 ? 'high' : undefined"
+          :loading="i === 0 ? undefined : 'eager'"
+        />
+      </div>
+    </div>
+
+    <div class="below wrap">
+      <div class="aside">
+        <p class="lead stand">
+          Syncro Digital: diseño, programo y mantengo la web de tu negocio, y dejo lista tu ficha de Google. Desde 600&nbsp;€.
+        </p>
+        <div class="actions">
+          <a href="#contacto" class="btn btn-yellow">Pedir presupuesto <span class="arrow" aria-hidden="true">→</span></a>
+          <a href="#trabajos" class="link">Ver trabajos</a>
         </div>
       </div>
-      
-      <!-- Subtle Grid Overlay -->
-      <div class="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)] dark:bg-[linear-gradient(theme(colors.blue.900/0.1)_1px,transparent_1px),linear-gradient(90deg,theme(colors.blue.900/0.1)_1px,transparent_1px)] bg-[length:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_70%,transparent_100%)]"></div>
 
-      <!-- Hero Glows -->
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[60vw] h-[90vw] md:h-[60vw] bg-primary/10 dark:bg-primary/20 rounded-full blur-[100px] md:blur-[160px] pointer-events-none"></div>
-      <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] md:w-[40vw] h-[50vw] md:h-[40vw] bg-secondary/5 dark:bg-secondary/10 rounded-full blur-[100px] md:blur-[140px] pointer-events-none transition-colors duration-500"></div>
-
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full py-20 overflow-hidden">
-          
-          <div class="max-w-5xl mx-auto text-center">
-              
-              <!-- Top Label -->
-              <div data-aos="fade-down" class="flex items-center justify-center gap-2 md:gap-3 mb-6 md:mb-10">
-                <div class="h-[1px] w-4 md:w-8 bg-primary/50"></div>
-                <span class="text-[10px] md:text-xs font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase text-primary-dark dark:text-primary-light/80 text-center">
-                  Consultora de Sincronía Digital
-                </span>
-                <div class="h-[1px] w-4 md:w-8 bg-primary/50"></div>
-              </div>
-              
-              <!-- Main Heading -->
-              <h1 data-aos="fade-up" data-aos-delay="100" class="text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] font-black tracking-tight leading-[1.1] md:leading-[0.95] mb-8 px-2 transition-colors duration-500 text-black dark:text-white">
-                  Tu negocio en
-                  <span class="block mt-2 relative inline-block">
-                    <span class="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-black via-primary to-black dark:from-white dark:via-primary-light dark:to-white">perfecta sintonía.</span>
-                    <!-- Neon Underline Effect -->
-                    <div class="absolute -bottom-2 md:-bottom-5 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent blur-[2px]"></div>
-                    <div class="absolute -bottom-2 md:-bottom-5 left-0 w-full h-[1px] bg-primary"></div>
-                  </span>
-              </h1>
-              
-              <!-- Description -->
-              <p data-aos="fade-up" data-aos-delay="200" class="text-lg md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mb-12 md:mb-16 font-light leading-relaxed px-4 transition-colors duration-500">
-                  Creamos ecosistemas digitales donde <span class="text-black dark:text-white font-medium">redes, web y procesos</span> convergen para impulsar tu marca sin límites.
-              </p>
-              
-              <!-- Action Group -->
-              <div data-aos="fade-up" data-aos-delay="300" class="flex flex-col sm:flex-row items-center justify-center gap-6 px-4">
-                <!-- Primary Action -->
-                <a href="#servicios" class="w-full sm:w-auto group relative px-8 md:px-10 py-4 md:py-5 bg-primary text-white font-bold rounded-none hover:bg-primary-dark transition-all duration-500 overflow-hidden text-center">
-                  <span class="relative z-10 flex items-center justify-center gap-3 tracking-widest uppercase text-xs md:text-sm">
-                    Ver Servicios
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform duration-500 group-hover:translate-x-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                  </span>
-                  <div class="absolute top-0 -left-full w-full h-full bg-white/20 skew-x-[-20deg] group-hover:left-full transition-all duration-700"></div>
-                </a>
-
-                <!-- Secondary Action -->
-                <a href="#portfolio" class="text-xs md:text-sm font-bold tracking-widest uppercase text-black/40 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors flex items-center gap-2 group py-2 duration-500">
-                  Explorar Portfolio
-                  <div class="h-[1px] w-0 bg-black dark:bg-white group-hover:w-8 transition-all duration-300"></div>
-                </a>
-              </div>
-
-          </div>
-      </div>
-
-      <!-- Bottom Gradient Mask -->
-      <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white dark:from-[#020617] to-transparent z-10 transition-colors duration-500"></div>
+      <h1 id="hero-title" class="display title">
+        <span class="line"><span>Webs que salen</span></span>
+        <span class="line"><span>en Google.</span></span>
+      </h1>
+    </div>
   </section>
 </template>
 
 <style scoped>
-.marquee-wrapper {
-  width: 100%;
-  overflow: hidden;
+.hero {
+  position: relative;
+  min-height: 100svh;
   display: flex;
+  flex-direction: column;
+  background: var(--blue);
 }
 
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+/* ---- masthead band: gutterless 6 x 2 mosaic ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  height: max(46svh, 320px);
+}
+.tile { overflow: hidden; position: relative; }
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  animation: drift 24s var(--ease-out) both;
+}
+.t-a { grid-column: 1 / 3; grid-row: 1; }
+.t-yellow { grid-column: 3; grid-row: 1 / 3; background: var(--yellow); }
+.t-b { grid-column: 4 / 6; grid-row: 1; }
+.t-black { grid-column: 6; grid-row: 1; background: var(--black); }
+.t-c { grid-column: 4; grid-row: 2; }
+.t-pink { grid-column: 1; grid-row: 2; background: var(--pink); }
+.t-d { grid-column: 2; grid-row: 2; }
+.t-surface { grid-column: 5; grid-row: 2; background: var(--blue-2); }
+.t-black2 { grid-column: 6; grid-row: 2; background: var(--black); }
+.t-c img { object-position: 30% top; }
+
+@keyframes drift {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
 }
 
-@keyframes marquee-reverse {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
+/* ---- under the band: standfirst on the margin, title on the axis ---- */
+.below {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 42fr 58fr;
+  align-items: start;
+  padding-top: clamp(32px, 4vw, 56px);
+  padding-bottom: clamp(48px, 6vw, 96px);
 }
-
-.marquee-text {
-  animation: marquee 30s linear infinite;
-  display: inline-block;
-  padding-right: 2rem;
+.aside { padding-right: var(--gap); padding-top: 0.6em; }
+.stand { max-width: 30ch; margin: 0 0 28px; }
+.actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.title {
+  font-size: clamp(64px, 8.3vw, 128px);
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  margin: 0;
+  text-wrap: initial;
 }
+.line { display: block; overflow: hidden; white-space: nowrap; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.line > span {
+  display: block;
+  animation: rise 0.9s var(--ease-out) both;
+}
+.line:nth-child(2) > span { animation-delay: 110ms; }
+.aside { animation: fade 0.7s var(--ease-out) 0.45s both; }
 
-.marquee-text-reverse {
-  animation: marquee-reverse 30s linear infinite;
-  display: inline-block;
-  padding-right: 2rem;
+@keyframes rise { from { transform: translateY(105%); } to { transform: none; } }
+@keyframes fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 860px) {
+  .band {
+    grid-template-columns: repeat(3, 1fr);
+    height: 38svh;
+    min-height: 260px;
+  }
+  .t-a { grid-column: 1 / 3; grid-row: 1; }
+  .t-yellow { grid-column: 3; grid-row: 1; }
+  .t-black { grid-column: 1; grid-row: 2; }
+  .t-c { grid-column: 2; grid-row: 2; }
+  .t-pink { grid-column: 3; grid-row: 2; }
+  .t-b, .t-d, .t-surface, .t-black2 { display: none; }
+
+  .below {
+    grid-template-columns: 1fr;
+    align-content: start;
+    padding-top: 36px;
+    gap: 24px;
+  }
+  .title { order: -1; font-size: 13vw; max-width: none; }
+  .aside { padding: 0; }
+  .stand { font-size: var(--step-body); max-width: 34ch; margin-bottom: 24px; }
 }
 </style>
